@@ -1,0 +1,60 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-02-26T08:21:37+03:00",
+    "name": "Bungeecord",
+    "author": "admin@faithnode.host",
+    "description": null,
+    "features": [],
+    "docker_images": {
+        "Java 21": "ghcr.io\/faithnode\/pterodactyl-images\/java:21",
+        "Java 20": "ghcr.io\/faithnode\/pterodactyl-images\/java:20",
+        "Java 19": "ghcr.io\/faithnode\/pterodactyl-images\/java:19",
+        "Java 18": "ghcr.io\/faithnode\/pterodactyl-images\/java:18",
+        "Java 17": "ghcr.io\/faithnode\/pterodactyl-images\/java:17",
+        "Java 16": "ghcr.io\/faithnode\/pterodactyl-images\/java:16",
+        "Java 15": "ghcr.io\/faithnode\/pterodactyl-images\/java:15",
+        "Java 11": "ghcr.io\/faithnode\/pterodactyl-images\/java:11",
+        "Java 8": "ghcr.io\/faithnode\/pterodactyl-images\/java:8"
+    },
+    "file_denylist": [],
+    "startup": "{{_STARTUP_COMMAND}}",
+    "config": {
+        "files": "{\r\n    \"config.yml\": {\r\n        \"parser\": \"yaml\",\r\n        \"find\": {\r\n            \"listeners[0].query_enabled\": true,\r\n            \"listeners[0].query_port\": \"{{server.build.default.port}}\",\r\n            \"listeners[0].host\": \"0.0.0.0:{{server.build.default.port}}\",\r\n            \"servers.*.address\": {\r\n                \"regex:^(127\\\\.0\\\\.0\\\\.1|localhost)(:\\\\d{1,5})?$\": \"{{config.docker.interface}}$2\"\r\n            }\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"Listening on \"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\r\n\r\napt update\r\napt install -y curl\r\n\r\nmkdir -p \/mnt\/server\/\r\ncd \/mnt\/server\/\r\n\r\nif [[ -z $_INSTALL_BUNGEECORD_VERSION || ${_INSTALL_BUNGEECORD_VERSION,,} == \"latest\" ]]; then\r\n  echo -e \"Getting latest version\";\r\n  DOWNLOAD_LINK=https:\/\/ci.md-5.net\/job\/BungeeCord\/lastSuccessfulBuild\/artifact\/bootstrap\/target\/BungeeCord.jar\r\nelse\r\n  DOWNLOAD_LINK=https:\/\/ci.md-5.net\/job\/BungeeCord\/$_INSTALL_BUNGEECORD_VERSION\/artifact\/bootstrap\/target\/BungeeCord.jar\r\n  if [[ -n $(curl -X HEAD -I $DOWNLOAD_LINK | head -n 1 | grep 404) ]]; then\r\n    echo \"Version $_INSTALL_BUNGEECORD_VERSION not found\";\r\n    exit 1;\r\n  fi\r\nfi\r\n\r\necho -e \"Downloading ${DOWNLOAD_LINK}\"\r\ncurl ${DOWNLOAD_LINK} -o bungeecord.jar || echo \"Version $_INSTALL_BUNGEECORD_VERSION not found\" && exit 1;\r\n\r\necho -e \"Install complete\"",
+            "container": "debian:buster-slim",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "\u041a\u043e\u043c\u0430\u043d\u0434\u0430 \u0437\u0430\u043f\u0443\u0441\u043a\u0430",
+            "description": "\u041a\u043e\u043c\u0430\u043d\u0434\u0430, \u043a\u043e\u0442\u043e\u0440\u0430\u044f \u0432\u044b\u043f\u043e\u043b\u043d\u044f\u0435\u0442\u0441\u044f \u043f\u0440\u0438 \u0437\u0430\u043f\u0443\u0441\u043a\u0435 \u0432\u0430\u0448\u0435\u0433\u043e \u0441\u0435\u0440\u0432\u0435\u0440\u0430",
+            "env_variable": "_STARTUP_COMMAND",
+            "default_value": "java -Xms128M -XX:MaxRAMPercentage=80 -Dterminal.jline=false -Dterminal.ansi=true -jar bungeecord*.jar",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:1000",
+            "field_type": "text"
+        },
+        {
+            "name": "\u0412\u0435\u0440\u0441\u0438\u044f \u0441\u0431\u043e\u0440\u043a\u0438 Bungeecord",
+            "description": "\u0421\u043f\u0438\u0441\u043e\u043a \u0434\u043e\u0441\u0442\u0443\u043f\u043d\u044b\u0445 \u0441\u0431\u043e\u0440\u043e\u043a \u043c\u043e\u0436\u043d\u043e \u043f\u043e\u0441\u043c\u043e\u0442\u0440\u0435\u0442\u044c <a href=\"https:\/\/ci.md-5.net\/job\/BungeeCord\/\" target=\"_blank\">\u0437\u0434\u0435\u0441\u044c<\/a>",
+            "env_variable": "_INSTALL_BUNGEECORD_VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:30",
+            "field_type": "text"
+        }
+    ]
+}

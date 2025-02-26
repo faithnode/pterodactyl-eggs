@@ -1,0 +1,60 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-02-26T08:17:51+03:00",
+    "name": "Paper",
+    "author": "admin@faithnode.host",
+    "description": null,
+    "features": [],
+    "docker_images": {
+        "Java 21": "ghcr.io\/faithnode\/pterodactyl-images\/java:21",
+        "Java 20": "ghcr.io\/faithnode\/pterodactyl-images\/java:20",
+        "Java 19": "ghcr.io\/faithnode\/pterodactyl-images\/java:19",
+        "Java 18": "ghcr.io\/faithnode\/pterodactyl-images\/java:18",
+        "Java 17": "ghcr.io\/faithnode\/pterodactyl-images\/java:17",
+        "Java 16": "ghcr.io\/faithnode\/pterodactyl-images\/java:16",
+        "Java 15": "ghcr.io\/faithnode\/pterodactyl-images\/java:15",
+        "Java 11": "ghcr.io\/faithnode\/pterodactyl-images\/java:11",
+        "Java 8": "ghcr.io\/faithnode\/pterodactyl-images\/java:8"
+    },
+    "file_denylist": [],
+    "startup": "{{_STARTUP_COMMAND}}",
+    "config": {
+        "files": "{\r\n    \"server.properties\": {\r\n        \"parser\": \"properties\",\r\n        \"find\": {\r\n            \"server-ip\": \"0.0.0.0\",\r\n            \"server-port\": \"{{server.build.default.port}}\"\r\n        }\r\n    },\r\n    \"eula.txt\": {\r\n        \"parser\": \"properties\",\r\n        \"find\": {\r\n            \"eula\": true\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \")! For help, type \"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\r\n\r\napt update\r\napt install -y curl jq\r\n\r\nmkdir -p \/mnt\/server\/\r\ncd \/mnt\/server\/\r\n\r\nif [[ -z $_INSTALL_PAPER_VERSION || ${_INSTALL_PAPER_VERSION,,} == \"latest\" ]]; then\r\n  echo -e \"Getting latest version\";\r\n  _INSTALL_PAPER_VERSION=$(curl -s https:\/\/api.papermc.io\/v2\/projects\/paper | jq -r '.versions[-1]');\r\nelse\r\n  if [[ -z $(curl -s https:\/\/api.papermc.io\/v2\/projects\/paper | jq -r \".versions[] | select(. == \\\"${_INSTALL_PAPER_VERSION}\\\")\") ]]; then\r\n    echo \"Version $_INSTALL_PAPER_VERSION not found\";\r\n    exit 1;\r\n  fi\r\nfi\r\n\r\necho -e \"Getting latest build\"\r\nPAPER_LAST_BUILD=$(curl -s https:\/\/api.papermc.io\/v2\/projects\/paper\/versions\/${_INSTALL_PAPER_VERSION} | jq -r '.builds[-1]')\r\n\r\necho -e \"Getting download link\"\r\nDOWNLOAD_LINK=https:\/\/api.papermc.io\/v2\/projects\/paper\/versions\/${_INSTALL_PAPER_VERSION}\/builds\/${PAPER_LAST_BUILD}\/downloads\/paper-${_INSTALL_PAPER_VERSION}-${PAPER_LAST_BUILD}.jar\r\n\r\necho -e \"Removing old jars\"\r\nrm -r .\/paper*.jar || true\r\n\r\necho -e \"Downloading ${DOWNLOAD_LINK}\"\r\ncurl ${DOWNLOAD_LINK} -o paper-${_INSTALL_PAPER_VERSION}-${PAPER_LAST_BUILD}.jar\r\n\r\necho -e \"Agree eula\";\r\necho \"eula=true\" > \"eula.txt\";\r\n\r\necho -e \"Install complete\"",
+            "container": "debian:buster-slim",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "\u041a\u043e\u043c\u0430\u043d\u0434\u0430 \u0437\u0430\u043f\u0443\u0441\u043a\u0430",
+            "description": "",
+            "env_variable": "_STARTUP_COMMAND",
+            "default_value": "java -Xms128M -XX:MaxRAMPercentage=80 -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar paper*.jar",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:1000",
+            "field_type": "text"
+        },
+        {
+            "name": "\u0412\u0435\u0440\u0441\u0438\u044f Paper \u0441\u0435\u0440\u0432\u0435\u0440\u0430",
+            "description": "\u0421\u043f\u0438\u0441\u043e\u043a \u0434\u043e\u0441\u0442\u0443\u043f\u043d\u044b\u0445 \u0432\u0435\u0440\u0441\u0438\u0439 \u043c\u043e\u0436\u043d\u043e \u043f\u043e\u0441\u043c\u043e\u0442\u0440\u0435\u0442\u044c <a href=\"https:\/\/papermc.io\/downloads\/paper\" target=\"_blank\">\u0437\u0434\u0435\u0441\u044c<\/a>",
+            "env_variable": "_INSTALL_PAPER_VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:30",
+            "field_type": "text"
+        }
+    ]
+}
