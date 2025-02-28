@@ -1,0 +1,16 @@
+name: Custom
+images:
+  - !!var images.java
+  - !!var images.java-eclipse-temurin
+  - !!var images.java-openj9
+  - !!var images.javafx
+
+config:
+  cmd: '{{_STARTUP_COMMAND}}'
+
+variables:
+  - env: _STARTUP_COMMAND
+    name: !!in variables.startupCommand.name
+    description: !!in variables.startupCommand.description
+    value: bash run.sh
+    rules: required|string|max:1000

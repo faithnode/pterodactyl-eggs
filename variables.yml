@@ -1,0 +1,28 @@
+images:
+  java:
+    name: Java {tag}
+    image: 'ghcr.io/faithnode/pterodactyl-images/java:{tag}'
+    tags: [ 8,11,15,16,17,18,19,20,21,22,23 ]
+  java-eclipse-temurin:
+    name: Java Eclipse Temurin {tag}
+    image: 'ghcr.io/faithnode/pterodactyl-images/java-eclipse-temurin:{tag}'
+    tags: [ 8,11,16,17,18,19,20,21 ]
+  java-openj9:
+    name: Java OpenJ9 {tag}
+    image: 'ghcr.io/faithnode/pterodactyl-images/java-openj9:{tag}'
+    tags: [ 8,11,16,17,18,19,20,21 ]
+  javafx:
+    name: Java FX {tag}
+    image: 'ghcr.io/faithnode/pterodactyl-images/javafx:{tag}'
+    tags: [ 11,15,16,17,18,19,20,21 ]
+
+config:
+  minecraft-java:
+    startup:
+      done: "! For help, type"
+    files:
+      "server.properties":
+        parser: properties
+        find:
+          server-ip: "0.0.0.0"
+          server-port: "{{server.build.default.port}}"

@@ -1,0 +1,26 @@
+name: Test
+
+on:
+  push:
+    paths:
+      - eggs/**
+  schedule:
+    - cron: "0 0 * * 0"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          bash bin/build.sh
+
+      - name: Test
+        run: |
+          bash bin/test.sh

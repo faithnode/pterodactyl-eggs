@@ -1,0 +1,33 @@
+name: Waterfall
+images:
+  - !!var images.java
+
+install:
+  script: !!file install.sh
+
+config:
+  cmd: '{{_STARTUP_COMMAND}}'
+  startup:
+    done: "Listening on "
+  files:
+    "config.yml":
+      parser: yaml
+      find:
+        "listeners[0].query_enabled": true
+        "listeners[0].query_port": '{{server.build.default.port}}'
+        "listeners[0].host": '0.0.0.0:{{server.build.default.port}}'
+        "servers.*.address":
+          "regex:^(127\\.0\\.0\\.1|localhost)(:\\d{1,5})?$": "{{config.docker.interface}}$2"
+
+
+variables:
+  - env: _STARTUP_COMMAND
+    name: !!in variables.startupCommand.name
+    description: !!in variables.startupCommand.description
+    value: java -Xms128M -XX:MaxRAMPercentage=80 -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar waterfall*.jar
+    rules: required|string|max:4000
+  - env: _INSTALL_WATERFALL_VERSION
+    name: !!in variables.waterfallVersion.name
+    description: !!in variables.waterfallVersion.description
+    value: latest
+    rules: required|string|max:100

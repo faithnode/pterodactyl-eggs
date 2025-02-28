@@ -1,0 +1,28 @@
+name: Velocity
+images:
+  - !!var images.java
+
+install:
+  script: !!file install.sh
+
+config:
+  cmd: '{{_STARTUP_COMMAND}}'
+  startup:
+    done: "Done ("
+  files:
+    "velocity.toml":
+      parser: file
+      find:
+        "bind = ": "bind = 0.0.0.0:{{server.build.default.port}}"
+
+variables:
+  - env: _STARTUP_COMMAND
+    name: !!in variables.startupCommand.name
+    description: !!in variables.startupCommand.description
+    value: java -Xms128M -XX:MaxRAMPercentage=80 -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar velocity*.jar
+    rules: required|string|max:4000
+  - env: _INSTALL_VELOCITY_VERSION
+    name: !!in variables.velocityVersion.name
+    description: !!in variables.velocityVersion.description
+    value: latest
+    rules: required|string|max:100

@@ -1,0 +1,24 @@
+name: Fabric
+images:
+  - !!var images.java
+
+install:
+  script: !!file install.sh
+  container: 'openjdk:21-jdk-slim'
+
+config:
+  cmd: '{{_STARTUP_COMMAND}}'
+  startup: !!var config.minecraft-java.startup
+  files: !!var config.minecraft-java.files
+
+variables:
+  - env: _STARTUP_COMMAND
+    name: !!in variables.startupCommand.name
+    description: !!in variables.startupCommand.description
+    value: bash run.sh
+    rules: required|string|max:4000
+  - env: _INSTALL_MINECRAFT_VERSION
+    name: !!in variables.fabricVersion.name
+    description: !!in variables.fabricVersion.description
+    value: latest
+    rules: required|string|max:100
