@@ -4,7 +4,7 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2025-03-21T12:46:07+03:00",
+    "exported_at": "2025-04-13T16:14:51+03:00",
     "name": "Forge",
     "author": "admin@faithnode.host",
     "description": null,
@@ -30,7 +30,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n# Forge Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\napt update\r\napt install -y curl jq\r\n\r\nif [[ ! -d \/mnt\/server ]]; then\r\n  mkdir \/mnt\/server\r\nfi\r\n\r\ncd \/mnt\/server\r\n\r\nPROMOTIONS=$(curl -sSL https:\/\/files.minecraftforge.net\/maven\/net\/minecraftforge\/forge\/promotions_slim.json)\r\n\r\necho -e \"Getting minecraft version\"\r\nif [[ -z ${_INSTALL_MINECRAFT_VERSION} || ${_INSTALL_MINECRAFT_VERSION,,} == \"latest\" ]]; then\r\n  if [[ -n ${_INSTALL_FORGE_VERSION} && ${_INSTALL_FORGE_VERSION,,} != \"latest\" ]]; then\r\n   echo \"It is not possible to get minecraft version by forge version ${_INSTALL_FORGE_VERSION}. You must specify minecraft version.\";\r\n   exit 1;\r\n  fi\r\n  _INSTALL_MINECRAFT_VERSION=$(echo $PROMOTIONS | jq -r '.promos | to_entries | last | .key');\r\n  _INSTALL_MINECRAFT_VERSION=${_INSTALL_MINECRAFT_VERSION%%-*}\r\nfi\r\n\r\necho -e \"Getting forge version\"\r\nif [[ -z ${_INSTALL_FORGE_VERSION} || ${_INSTALL_FORGE_VERSION,,} == \"latest\" ]]; then\r\n  _INSTALL_FORGE_VERSION=$(echo $PROMOTIONS | jq -r \".promos | to_entries | .[] | select(.key | startswith(\\\"${_INSTALL_MINECRAFT_VERSION}\\\")) | .value\" | head -1);\r\nfi\r\n\r\n\r\nDOWNLOAD_LINK=https:\/\/maven.minecraftforge.net\/net\/minecraftforge\/forge\/${_INSTALL_MINECRAFT_VERSION}-${_INSTALL_FORGE_VERSION}\/forge-${_INSTALL_MINECRAFT_VERSION}-${_INSTALL_FORGE_VERSION}-installer.jar\r\n\r\nif [[ -n $(curl -X HEAD -I $DOWNLOAD_LINK | head -n 1 | grep 404) ]]; then\r\n  echo \"Installer version ${_INSTALL_MINECRAFT_VERSION}-${_INSTALL_FORGE_VERSION} not found\";\r\n  exit 1;\r\nfi\r\n\r\necho -e \"Downloading forge installer\"\r\ncurl -sSL -o installer.jar $DOWNLOAD_LINK\r\n\r\necho -e \"Removing old jars\"\r\nrm -r .\/forge*.jar || true\r\n\r\necho -e \"Installing forge\"\r\njava -jar installer.jar --installServer\r\n\r\necho -e \"Removing installer\"\r\nrm installer.jar installer.jar.log || true\r\n\r\necho -e \"Agree eula\";\r\necho \"eula=true\" > \"eula.txt\";\r\n\r\necho -e \"Install Complete\"",
+            "script": "#!\/bin\/bash\r\n# Forge Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\napt update\r\napt install -y curl jq\r\n\r\nif [[ ! -d \/mnt\/server ]]; then\r\n  mkdir \/mnt\/server\r\nfi\r\n\r\ncd \/mnt\/server\r\n\r\nPROMOTIONS=$(curl -sSL https:\/\/files.minecraftforge.net\/maven\/net\/minecraftforge\/forge\/promotions_slim.json)\r\n\r\necho -e \"Getting minecraft version\"\r\nif [[ -z ${_INSTALL_MINECRAFT_VERSION} || ${_INSTALL_MINECRAFT_VERSION,,} == \"latest\" ]]; then\r\n  _INSTALL_MINECRAFT_VERSION=$(echo $PROMOTIONS | jq -r '.promos | to_entries | last | .key');\r\n  _INSTALL_MINECRAFT_VERSION=${_INSTALL_MINECRAFT_VERSION%%-*}\r\nfi\r\n\r\necho -e \"Getting forge version\"\r\nFORGE_VERSION=$(echo $PROMOTIONS | jq -r \".promos | to_entries | .[] | select(.key | startswith(\\\"${_INSTALL_MINECRAFT_VERSION}\\\")) | .value\" | head -1);\r\n\r\nDOWNLOAD_LINK=https:\/\/maven.minecraftforge.net\/net\/minecraftforge\/forge\/${_INSTALL_MINECRAFT_VERSION}-${FORGE_VERSION}\/forge-${_INSTALL_MINECRAFT_VERSION}-${FORGE_VERSION}-installer.jar\r\n\r\nif [[ -n $(curl -X HEAD -I $DOWNLOAD_LINK | head -n 1 | grep 404) ]]; then\r\n  echo \"Minecraft version ${_INSTALL_MINECRAFT_VERSION} not found\";\r\n  exit 1;\r\nfi\r\n\r\necho -e \"Downloading forge installer\"\r\ncurl -sSL -o installer.jar $DOWNLOAD_LINK\r\n\r\nif [ -e .\/forge*.jar ]; then\r\n  echo -e \"Removing old jars\";\r\n  rm -r .\/forge*.jar || true\r\nfi\r\n\r\necho -e \"Installing forge\"\r\njava -jar installer.jar --installServer\r\n\r\necho -e \"Removing installer\"\r\nrm installer.jar installer.jar.log || true\r\n\r\nif [ ! -e .\/run.sh ]; then\r\n  echo -e \"Creating installation script\"\r\n  echo \"java -jar forge*.jar\" > \"run.sh\";\r\nfi\r\n\r\necho -e \"Agree eula\";\r\necho \"eula=true\" > \"eula.txt\";\r\n\r\necho -e \"Install Complete\"",
             "container": "openjdk:21-jdk-slim",
             "entrypoint": "bash"
         }
@@ -40,20 +40,10 @@
             "name": "\u041a\u043e\u043c\u0430\u043d\u0434\u0430 \u0437\u0430\u043f\u0443\u0441\u043a\u0430",
             "description": "\u041a\u043e\u043c\u0430\u043d\u0434\u0430, \u043a\u043e\u0442\u043e\u0440\u0430\u044f \u0432\u044b\u043f\u043e\u043b\u043d\u044f\u0435\u0442\u0441\u044f \u043f\u0440\u0438 \u0437\u0430\u043f\u0443\u0441\u043a\u0435 \u0441\u0435\u0440\u0432\u0435\u0440\u0430",
             "env_variable": "_STARTUP_COMMAND",
-            "default_value": "java -Xms128M -XX:MaxRAMPercentage=80 -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar forge*.jar",
+            "default_value": "bash run.sh",
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:1000",
-            "field_type": "text"
-        },
-        {
-            "name": "\u0412\u0435\u0440\u0441\u0438\u044f Forge",
-            "description": "\u0421\u043f\u0438\u0441\u043e\u043a \u0434\u043e\u0441\u0442\u0443\u043f\u043d\u044b\u0445 \u0432\u0435\u0440\u0441\u0438\u0439 \u043c\u043e\u0436\u043d\u043e \u043f\u043e\u0441\u043c\u043e\u0442\u0440\u0435\u0442\u044c <a href=\"https:\/\/files.minecraftforge.net\/net\/minecraftforge\/forge\/\" target=\"_blank\">\u0437\u0434\u0435\u0441\u044c<\/a>",
-            "env_variable": "_INSTALL_FORGE_VERSION",
-            "default_value": "54.1.1",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|string|max:30",
             "field_type": "text"
         },
         {

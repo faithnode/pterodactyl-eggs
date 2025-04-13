@@ -4,9 +4,9 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2025-02-26T08:17:51+03:00",
+    "exported_at": "2025-04-13T16:16:42+03:00",
     "name": "Paper",
-    "author": "admin@faithnode.host",
+    "author": "help@faithnode.host",
     "description": null,
     "features": [],
     "docker_images": {
@@ -30,7 +30,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n\r\napt update\r\napt install -y curl jq\r\n\r\nmkdir -p \/mnt\/server\/\r\ncd \/mnt\/server\/\r\n\r\nif [[ -z $_INSTALL_PAPER_VERSION || ${_INSTALL_PAPER_VERSION,,} == \"latest\" ]]; then\r\n  echo -e \"Getting latest version\";\r\n  _INSTALL_PAPER_VERSION=$(curl -s https:\/\/api.papermc.io\/v2\/projects\/paper | jq -r '.versions[-1]');\r\nelse\r\n  if [[ -z $(curl -s https:\/\/api.papermc.io\/v2\/projects\/paper | jq -r \".versions[] | select(. == \\\"${_INSTALL_PAPER_VERSION}\\\")\") ]]; then\r\n    echo \"Version $_INSTALL_PAPER_VERSION not found\";\r\n    exit 1;\r\n  fi\r\nfi\r\n\r\necho -e \"Getting latest build\"\r\nPAPER_LAST_BUILD=$(curl -s https:\/\/api.papermc.io\/v2\/projects\/paper\/versions\/${_INSTALL_PAPER_VERSION} | jq -r '.builds[-1]')\r\n\r\necho -e \"Getting download link\"\r\nDOWNLOAD_LINK=https:\/\/api.papermc.io\/v2\/projects\/paper\/versions\/${_INSTALL_PAPER_VERSION}\/builds\/${PAPER_LAST_BUILD}\/downloads\/paper-${_INSTALL_PAPER_VERSION}-${PAPER_LAST_BUILD}.jar\r\n\r\necho -e \"Removing old jars\"\r\nrm -r .\/paper*.jar || true\r\n\r\necho -e \"Downloading ${DOWNLOAD_LINK}\"\r\ncurl ${DOWNLOAD_LINK} -o paper-${_INSTALL_PAPER_VERSION}-${PAPER_LAST_BUILD}.jar\r\n\r\necho -e \"Agree eula\";\r\necho \"eula=true\" > \"eula.txt\";\r\n\r\necho -e \"Install complete\"",
+            "script": "#!\/bin\/bash\r\n\r\napt update\r\napt install -y curl jq\r\n\r\nmkdir -p \/mnt\/server\/\r\ncd \/mnt\/server\/\r\n\r\nif [[ -z $_INSTALL_PAPER_VERSION || ${_INSTALL_PAPER_VERSION,,} == \"latest\" ]]; then\r\n  echo -e \"Getting latest version\";\r\n  _INSTALL_PAPER_VERSION=$(curl -s https:\/\/api.papermc.io\/v2\/projects\/paper | jq -r '.versions[-1]');\r\nelse\r\n  if [[ -z $(curl -s https:\/\/api.papermc.io\/v2\/projects\/paper | jq -r \".versions[] | select(. == \\\"${_INSTALL_PAPER_VERSION}\\\")\") ]]; then\r\n    echo \"Version $_INSTALL_PAPER_VERSION not found\";\r\n    exit 1;\r\n  fi\r\nfi\r\n\r\necho -e \"Getting latest build\"\r\nPAPER_LAST_BUILD=$(curl -s https:\/\/api.papermc.io\/v2\/projects\/paper\/versions\/${_INSTALL_PAPER_VERSION} | jq -r '.builds[-1]')\r\n\r\necho -e \"Getting download link\"\r\nDOWNLOAD_LINK=https:\/\/api.papermc.io\/v2\/projects\/paper\/versions\/${_INSTALL_PAPER_VERSION}\/builds\/${PAPER_LAST_BUILD}\/downloads\/paper-${_INSTALL_PAPER_VERSION}-${PAPER_LAST_BUILD}.jar\r\n\r\nif [ -e .\/paper*.jar ]; then\r\n  echo -e \"Removing old jars\"\r\n  rm -r .\/paper*.jar || true\r\nfi\r\n\r\necho -e \"Downloading ${DOWNLOAD_LINK}\"\r\ncurl ${DOWNLOAD_LINK} -o paper-${_INSTALL_PAPER_VERSION}-${PAPER_LAST_BUILD}.jar\r\n\r\necho -e \"Agree eula\";\r\necho \"eula=true\" > \"eula.txt\";\r\n\r\necho -e \"Install complete\"",
             "container": "debian:buster-slim",
             "entrypoint": "bash"
         }
