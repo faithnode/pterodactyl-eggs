@@ -30,7 +30,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!/bin/bash\n\napt update -qq && apt install -qq -y curl;\nmkdir -p /mnt/server/ && cd /mnt/server/;\n\ncurl -sfL https://raw.githubusercontent.com/faithnode/pterodactyl-eggs/refs/heads/master/minecraft-java/fabric/install.sh | sh -;",
+            "script": "#!/bin/bash\n\napt update -qq && apt install -qq -y curl;\nmkdir -p /mnt/server/ && cd /mnt/server/;\n\ncurl -sfL https://raw.githubusercontent.com/faithnode/pterodactyl-eggs/refs/heads/master/minecraft-java/fabric/install.sh | bash -;",
             "container": "openjdk:21-jdk-slim",
             "entrypoint": "bash"
         }
