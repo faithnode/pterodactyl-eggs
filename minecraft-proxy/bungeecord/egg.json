@@ -30,7 +30,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n\r\napt update\r\napt install -y curl\r\n\r\nmkdir -p \/mnt\/server\/\r\ncd \/mnt\/server\/\r\n\r\nif [[ -z $_INSTALL_BUNGEECORD_VERSION || ${_INSTALL_BUNGEECORD_VERSION,,} == \"latest\" ]]; then\r\n  echo -e \"Getting latest version\";\r\n  DOWNLOAD_LINK=https:\/\/ci.md-5.net\/job\/BungeeCord\/lastSuccessfulBuild\/artifact\/bootstrap\/target\/BungeeCord.jar\r\nelse\r\n  DOWNLOAD_LINK=https:\/\/ci.md-5.net\/job\/BungeeCord\/$_INSTALL_BUNGEECORD_VERSION\/artifact\/bootstrap\/target\/BungeeCord.jar\r\n  if [[ -n $(curl -X HEAD -I $DOWNLOAD_LINK | head -n 1 | grep 404) ]]; then\r\n    echo \"Version $_INSTALL_BUNGEECORD_VERSION not found\";\r\n    exit 1;\r\n  fi\r\nfi\r\n\r\necho -e \"Downloading ${DOWNLOAD_LINK}\"\r\ncurl ${DOWNLOAD_LINK} -o bungeecord.jar || echo \"Version $_INSTALL_BUNGEECORD_VERSION not found\" && exit 1;\r\n\r\necho -e \"Install complete\"",
+            "script": "curl -sfL https://github.com/faithnode/pterodactyl-eggs/tree/master/minecraft-proxy/bungeecord/install.sh | sh -",
             "container": "debian:buster-slim",
             "entrypoint": "bash"
         }
