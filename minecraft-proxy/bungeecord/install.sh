@@ -1,10 +1,4 @@
-#!/bin/sh
-
-apt update
-apt install -y curl
-
-mkdir -p /mnt/server/
-cd /mnt/server/
+#!/bin/bash
 
 if [[ -z $_INSTALL_BUNGEECORD_VERSION || ${_INSTALL_BUNGEECORD_VERSION,,} == "latest" ]]; then
   echo -e "Getting latest version";

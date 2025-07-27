@@ -30,7 +30,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "curl -sfL https://github.com/faithnode/pterodactyl-eggs/tree/master/minecraft-proxy/bungeecord/install.sh | sh -",
+            "script": "#!/bin/bash\n\napt update -qq && apt install -qq -y curl;\nmkdir -p /mnt/server/ && cd /mnt/server/;\n\ncurl -sfL https://raw.githubusercontent.com/faithnode/pterodactyl-eggs/refs/heads/master/minecraft-proxy/bungeecord/install.sh | sh -;",
             "container": "debian:buster-slim",
             "entrypoint": "bash"
         }

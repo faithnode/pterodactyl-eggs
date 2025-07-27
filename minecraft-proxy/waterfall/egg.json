@@ -30,7 +30,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n\r\napt update\r\napt install -y curl jq\r\n\r\nmkdir -p \/mnt\/server\/\r\ncd \/mnt\/server\/\r\n\r\nif [[ -z $_INSTALL_WATERFALL_VERSION || ${_INSTALL_WATERFALL_VERSION,,} == \"latest\" ]]; then\r\n  echo -e \"Getting latest version\";\r\n  _INSTALL_WATERFALL_VERSION=$(curl -s https:\/\/api.papermc.io\/v2\/projects\/waterfall | jq -r '.versions[-1]');\r\nelse\r\n  if [[ -z $(curl -s https:\/\/api.papermc.io\/v2\/projects\/waterfall | jq -r \".versions[] | select(. == \\\"${_INSTALL_WATERFALL_VERSION}\\\")\") ]]; then\r\n    echo \"Version $_INSTALL_WATERFALL_VERSION not found\";\r\n    exit 1;\r\n  fi\r\nfi\r\n\r\necho -e \"Getting latest build\"\r\nWATERFALL_LAST_BUILD=$(curl -s https:\/\/api.papermc.io\/v2\/projects\/waterfall\/versions\/${_INSTALL_WATERFALL_VERSION} | jq -r '.builds[-1]')\r\n\r\necho -e \"Getting download link\"\r\nDOWNLOAD_LINK=https:\/\/api.papermc.io\/v2\/projects\/waterfall\/versions\/${_INSTALL_WATERFALL_VERSION}\/builds\/${WATERFALL_LAST_BUILD}\/downloads\/waterfall-${_INSTALL_WATERFALL_VERSION}-${WATERFALL_LAST_BUILD}.jar\r\n\r\necho -e \"Removing old jars\"\r\nrm -r .\/waterfall*.jar || true\r\n\r\necho -e \"Downloading ${DOWNLOAD_LINK}\"\r\ncurl ${DOWNLOAD_LINK} -o waterfall-${_INSTALL_WATERFALL_VERSION}-${WATERFALL_LAST_BUILD}.jar\r\n\r\necho -e \"Install complete\"",
+            "script": "#!/bin/bash\n\napt update -qq && apt install -qq -y curl;\nmkdir -p /mnt/server/ && cd /mnt/server/;\n\ncurl -sfL https://raw.githubusercontent.com/faithnode/pterodactyl-eggs/refs/heads/master/minecraft-proxy/waterfall/install.sh | sh -;",
             "container": "debian:buster-slim",
             "entrypoint": "bash"
         }
