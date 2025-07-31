@@ -89,7 +89,7 @@ jobs:
               },
               "variables": []
             }
-            EOF
+          EOF
           done
 
       - name: Upload Artifact
