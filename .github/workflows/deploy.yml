@@ -28,6 +28,8 @@ jobs:
         run: |
           #!/bin/bash
           
+          echo $(find . -name egg.json)
+          
           for i in $(find . -name egg.json); do
             EGG_DIR=$(dirname "$i");
             OUT_DIR=$(dirname "/tmp/dist/${EGG_DIR}")
