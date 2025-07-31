@@ -23,7 +23,9 @@ jobs:
 
       - name: Build
         env:
-          URL: 'https://pterodactyl-eggs.faithnode.com/'
+          URL: ${{ env.URL }}
+          COMMENT: ${{ env.COMMENT }}
+          AUTHOR: ${{ env.AUTHOR }}
         working-directory: ./eggs
         run: |
           #!/bin/bash
