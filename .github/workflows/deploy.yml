@@ -30,7 +30,7 @@ jobs:
           
           for i in $(find . -name egg.json); do
             EGG_DIR=$(dirname "$i");
-            OUT_DIR=$(dirname "../.dist/${EGG_DIR}")
+            OUT_DIR=$(dirname "/tmp/dist/${EGG_DIR}")
             OUT_NAME=$(basename $EGG_DIR)
           
             mkdir -p "${OUT_DIR}"
@@ -93,7 +93,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './.dist'
+          path: '/tmp/dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
