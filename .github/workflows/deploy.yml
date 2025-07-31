@@ -58,7 +58,7 @@ jobs:
             INSTALL_CONTAINER=$(echo $CONFIG | jq '.install.container // "debian:bookworm-slim"')
             INSTALL_ENTRYPOINT=$(echo $CONFIG | jq '.install.entrypoint // "/bin/bash"');
             INSTALL_SCRIPT=$(echo $CONFIG | jq '.install.script');
-            if [ "$INSTALL_SCRIPT" == "null" ]; then INSTALL_SCRIPT="$(cat "${EGG_DIR}/install.sh" || true | jq -sR '.')"; fi
+            if [ "$INSTALL_SCRIPT" == "null" ]; then INSTALL_SCRIPT="$(jq -sR '.' <<< $(cat "${EGG_DIR}/install.sh" || true))"; fi
           
             jq . > "${OUT_DIR}/${OUT_NAME}.json" << EOF
             {
