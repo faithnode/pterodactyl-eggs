@@ -28,11 +28,9 @@ jobs:
         run: |
           #!/bin/bash
           
-          echo $(find . -name egg.json)
-          
-          for i in $(find . -name egg.json); do
+          for i in $(find . -name egg.yml); do
             EGG_DIR=$(dirname "$i");
-            OUT_DIR=$(dirname "/tmp/dist/${EGG_DIR}")
+            OUT_DIR=$(dirname "../.dist/${EGG_DIR}")
             OUT_NAME=$(basename $EGG_DIR)
           
             mkdir -p "${OUT_DIR}"
@@ -95,7 +93,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '/tmp/dist'
+          path: './.dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
