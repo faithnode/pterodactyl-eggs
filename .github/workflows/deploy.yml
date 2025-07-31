@@ -22,9 +22,8 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Build
-        environment:
+        env:
           URL: ${{ steps.deployment.outputs.page_url }}
-          AUTHOR: ф
         working-directory: ./eggs
         run: |
           #!/bin/bash
@@ -43,7 +42,7 @@ jobs:
             DATE="$(date '+%Y-%m-%dT%H:%M:%S%:z')";
           
             if [ -n "$COMMENT" ]; then COMMENT="\"$COMMENT\""; else COMMENT='null'; fi
-            if [ -n "$URL" ]; then URL="\"$URL\""; else URL='null'; fi
+            if [ -n "$URL" ]; then UPDATE_URL="\"$(dirname $(echo $EGG_DIR | sed 's/^.\///'))/$OUT_NAME.json\""; else UPDATE_URL='null'; fi
             if [ -n "$AUTHOR" ]; then AUTHOR="\"admin@faithnode.com\""; else AUTHOR="\"$AUTHOR\""; fi
           
             NAME=$(echo $CONFIG | jq '.name')
@@ -66,7 +65,7 @@ jobs:
             "_comment": ${COMMENT},
             "meta": {
               "version": "PTDL_v2",
-              "update_url": ${URL}
+              "update_url": ${UPDATE_URL}
             },
             "name": ${NAME},
             "author": ${AUTHOR},
