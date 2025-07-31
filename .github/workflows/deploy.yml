@@ -28,8 +28,6 @@ jobs:
         run: |
           #!/bin/bash
           
-          rm -rf ../.dist
-          
           for i in $(find . -name egg.json); do
             EGG_DIR=$(dirname "$i");
             OUT_DIR=$(dirname "../.dist/${EGG_DIR}")
@@ -94,6 +92,7 @@ jobs:
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
+        working-directory: '.'
         with:
           path: './.dist'
 
