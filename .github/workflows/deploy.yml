@@ -17,12 +17,87 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
+      - name: Build
+        environment:
+          URL: ${{ steps.deployment.outputs.page_url }}
+          AUTHOR: ф
+        working-directory: ./eggs
+        run: |
+          #!/bin/bash
+          
+          rm -rf ../.dist
+          
+          for i in $(find . -name egg.json); do
+            EGG_DIR=$(dirname "$i");
+            OUT_DIR=$(dirname "../.dist/${EGG_DIR}")
+            OUT_NAME=$(basename $EGG_DIR)
+          
+            mkdir -p "${OUT_DIR}"
+          
+            CONFIG=$(cat "${EGG_DIR}/egg.yml" | yq -o=json ".");
+          
+            DATE="$(date '+%Y-%m-%dT%H:%M:%S%:z')";
+          
+            if [ -n "$COMMENT" ]; then COMMENT="\"$COMMENT\""; else COMMENT='null'; fi
+            if [ -n "$URL" ]; then URL="\"$URL\""; else URL='null'; fi
+            if [ -n "$AUTHOR" ]; then AUTHOR="\"admin@faithnode.com\""; else AUTHOR="\"$AUTHOR\""; fi
+          
+            NAME=$(echo $CONFIG | jq '.name')
+            DESCRIPTION=$(echo $CONFIG | jq '.description');
+          
+            CMD=$(echo $CONFIG | jq '.config.cmd // "echo \"hello world\""');
+          
+            STARTUP=$(echo $CONFIG | jq '.config.startup // {"done":""}' | jq -sR .);
+            FILES=$(echo $CONFIG | jq '.config.files // {}' | jq -sR .);
+            LOGS=$(echo $CONFIG | jq '.config.logs // {}' | jq -sR .);
+            STOP=$(echo $CONFIG | jq '.config.stop // "^C"');
+          
+            INSTALL_CONTAINER=$(echo $CONFIG | jq '.install.container // "debian:bookworm-slim"')
+            INSTALL_ENTRYPOINT=$(echo $CONFIG | jq '.install.entrypoint // "/bin/bash"');
+            INSTALL_SCRIPT=$(echo $CONFIG | jq '.install.script');
+            if [ "$INSTALL_SCRIPT" == "null" ]; then INSTALL_SCRIPT="$(cat "${EGG_DIR}/install.sh" || true | jq -sR '.')"; fi
+          
+            jq . > "${OUT_DIR}/${OUT_NAME}.json" << EOF
+          {
+            "_comment": ${COMMENT},
+            "meta": {
+              "version": "PTDL_v2",
+              "update_url": ${URL}
+            },
+            "name": ${NAME},
+            "author": ${AUTHOR},
+            "description": ${DESCRIPTION},
+            "features": null,
+            "docker_images": {},
+            "file_denylist": [],
+            "startup": ${CMD},
+            "config": {
+                "files": ${FILES},
+                "startup": ${STARTUP},
+                "logs": ${LOGS},
+                "stop": ${STOP}
+            },
+            "scripts": {
+                "installation": {
+                    "script": ${INSTALL_SCRIPT},
+                    "container": ${INSTALL_CONTAINER},
+                    "entrypoint": ${INSTALL_ENTRYPOINT}
+                }
+            },
+            "variables": []
+          }
+          EOF
+          done
+
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: './.dist'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
