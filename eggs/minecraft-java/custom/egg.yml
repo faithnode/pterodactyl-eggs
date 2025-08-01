@@ -1,17 +1,17 @@
 name: Custom
 images:
-  - name: Java {value}
-    image: 'ghcr.io/faithnode/pterodactyl-images/java:{value}'
-    values: [ 8,11,15,16,17,18,19,20,21,22,23 ]
-  - name: Java Eclipse Temurin {value}
-    image: 'ghcr.io/faithnode/pterodactyl-images/java-eclipse-temurin:{value}'
-    values: [ 8,11,16,17,18,19,20,21 ]
-  - name: Java OpenJ9 {value}
-    image: 'ghcr.io/faithnode/pterodactyl-images/java-openj9:{value}'
-    values: [ 8,11,16,17,18,19,20,21 ]
-  - name: Java FX {value}
-    image: 'ghcr.io/faithnode/pterodactyl-images/javafx:{value}'
-    values: [ 11,15,16,17,18,19,20,21 ]
+  - name: Java {tag}
+    image: 'ghcr.io/faithnode/pterodactyl-images/java:{tag}'
+    tags: [ 8,11,15,16,17,18,19,20,21,22,23 ]
+  - name: Java Eclipse Temurin {tag}
+    image: 'ghcr.io/faithnode/pterodactyl-images/java-eclipse-temurin:{tag}'
+    tags: [ 8,11,16,17,18,19,20,21 ]
+  - name: Java OpenJ9 {tag}
+    image: 'ghcr.io/faithnode/pterodactyl-images/java-openj9:{tag}'
+    tags: [ 8,11,16,17,18,19,20,21 ]
+  - name: Java FX {tag}
+    image: 'ghcr.io/faithnode/pterodactyl-images/javafx:{tag}'
+    tags: [ 11,15,16,17,18,19,20,21 ]
 
 install:
   container: debian:buster-slim

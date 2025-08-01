@@ -62,10 +62,10 @@ jobs:
             if [ "$INSTALL_SCRIPT" == "null" ]; then INSTALL_SCRIPT="$(jq -sR '.' <<< $(cat "${EGG_DIR}/install.sh" || true))"; fi
             
             DOCKER_IMAGES=$(echo $CONFIG | jq -c '.images[] | 
-              (.values // [null])[] as $v | {
-                name: (.name | sub("{value}"; $v | tostring)), 
-                image: (.image | sub("{value}"; $v | tostring))
-              }');
+              (.tags // [null])[] as $v | {
+                name: (.name | sub("{tag}"; $v | tostring)), 
+                image: (.image | sub("{tag}"; $v | tostring))
+              } | reduce . as $i ({}; .[$i.name] = $i.image)' | jq -s 'add');
             VARIABLES=$(echo $CONFIG | jq -c '.variables // [] | map({
               name,
               description,
