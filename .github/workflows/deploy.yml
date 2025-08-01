@@ -22,10 +22,6 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Build
-        env:
-          URL: ${{ env.URL }}
-          COMMENT: ${{ env.COMMENT }}
-          AUTHOR: ${{ env.AUTHOR }}
         working-directory: ./eggs
         run: |
           #!/bin/bash
@@ -43,7 +39,7 @@ jobs:
           
             if [ -n "$COMMENT" ]; then COMMENT="\"$COMMENT\""; else COMMENT='null'; fi
             if [ -n "$URL" ]; then UPDATE_URL="\"$URL$(dirname $(echo $EGG_DIR | sed 's/^.\///'))/$OUT_NAME.json\""; else UPDATE_URL='null'; fi
-            if [ -n "$AUTHOR" ]; then AUTHOR="\"admin@faithnode.com\""; else AUTHOR="\"$AUTHOR\""; fi
+            if [ -n "$AUTHOR" ]; then AUTHOR="\"$AUTHOR\""; else AUTHOR="\"admin@faithnode.com\""; fi
           
             NAME=$(echo $CONFIG | jq '.name')
             DESCRIPTION=$(echo $CONFIG | jq '.description');
@@ -59,7 +55,9 @@ jobs:
             INSTALL_ENTRYPOINT=$(echo $CONFIG | jq '.install.entrypoint // "/bin/bash"');
             INSTALL_SCRIPT=$(echo $CONFIG | jq '.install.script');
             if [ "$INSTALL_SCRIPT" == "null" ]; then INSTALL_SCRIPT="$(jq -sR '.' <<< $(cat "${EGG_DIR}/install.sh" || true))"; fi
-          
+            
+            DOCKER_IMAGES=$(echo $CONFIG | jq -c 'reduce (.images[] // []) as $i ({}; .[$i.name] = $i.image)');
+            
             jq . > "${OUT_DIR}/${OUT_NAME}.json" << EOF
             {
               "_comment": ${COMMENT},
@@ -71,7 +69,7 @@ jobs:
               "author": ${AUTHOR},
               "description": ${DESCRIPTION},
               "features": null,
-              "docker_images": {},
+              "docker_images": ${DOCKER_IMAGES},
               "file_denylist": [],
               "startup": ${CMD},
               "config": {
