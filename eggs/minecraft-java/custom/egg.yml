@@ -10,7 +10,7 @@ images:
     image: 'ghcr.io/faithnode/pterodactyl-images/java-openj9:{value}'
     values: [ 8,11,16,17,18,19,20,21 ]
   - name: Java FX {value}
-    image: 'ghcr.io/faithnode/pterodactyl-images/java-openj9:{value}'
+    image: 'ghcr.io/faithnode/pterodactyl-images/javafx:{value}'
     values: [ 11,15,16,17,18,19,20,21 ]
 
 install:
