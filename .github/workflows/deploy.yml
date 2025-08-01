@@ -5,6 +5,11 @@ on:
     branches:
       - master
 
+env:
+  URL: 'https://pterodactyl-eggs.faithnode.com/'
+  AUTHOR: 'admin@faithnode.com'
+  COMMENT: 'GENERATED WITH FAITHNODE'
+
 jobs:
   deploy:
     environment:
