@@ -62,7 +62,17 @@ jobs:
             if [ "$INSTALL_SCRIPT" == "null" ]; then INSTALL_SCRIPT="$(jq -sR '.' <<< $(cat "${EGG_DIR}/install.sh" || true))"; fi
             
             DOCKER_IMAGES=$(echo $CONFIG | jq -c 'reduce (.images[] // []) as $i ({}; .[$i.name] = $i.image)');
-            
+            VARIABLES=$(echo $CONFIG | jq -c '.variables // [] | map({ \
+              name, \
+              description, \
+              env_variable: .env, \
+              default_value: .value, \
+              user_viewable: (.permissions.view // true), \
+              user_editable: (.permissions.edit // true), \
+              rules: (.rules // "string"), \
+              field_type: (.type // "text") \
+            })');
+
             jq . > "${OUT_DIR}/${OUT_NAME}.json" << EOF
             {
               "_comment": ${COMMENT},
@@ -90,7 +100,7 @@ jobs:
                       "entrypoint": ${INSTALL_ENTRYPOINT}
                   }
               },
-              "variables": []
+              "variables": ${VARIABLES}
             }
           EOF
           done
