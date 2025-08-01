@@ -1,7 +1,17 @@
 name: Custom
 images:
-  - name: Java 23
-    image: ghcr.io/faithnode/pterodactyl-images/java:23
+  - name: Java {value}
+    image: 'ghcr.io/faithnode/pterodactyl-images/java:{value}'
+    values: [ 8,11,15,16,17,18,19,20,21,22,23 ]
+  - name: Java Eclipse Temurin {value}
+    image: 'ghcr.io/faithnode/pterodactyl-images/java-eclipse-temurin:{value}'
+    values: [ 8,11,16,17,18,19,20,21 ]
+  - name: Java OpenJ9 {value}
+    image: 'ghcr.io/faithnode/pterodactyl-images/java-openj9:{value}'
+    values: [ 8,11,16,17,18,19,20,21 ]
+  - name: Java FX {value}
+    image: 'ghcr.io/faithnode/pterodactyl-images/java-openj9:{value}'
+    values: [ 11,15,16,17,18,19,20,21 ]
 
 install:
   container: debian:buster-slim
@@ -25,7 +35,3 @@ variables:
     description: Список доступных версий можно посмотреть <a href="https://files.minecraftforge.net/net/minecraftforge/forge/" target="_blank">здесь</a>
     value: 1.21.4
     rules: required|string|max:1000
-    type: text
-    permissions:
-      view: true
-      edit: true
