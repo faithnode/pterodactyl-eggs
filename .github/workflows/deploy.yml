@@ -38,16 +38,16 @@ jobs:
           
             mkdir -p "${OUT_DIR}"
           
-            CONFIG=$(cat "${EGG_DIR}/egg.yml" | yq -o=json "(.. |
-              with(select(tag == \"\!\!var\");
-              . |= (. | to_string | split(\".\") | .[] as \$item ireduce (load(\"../variables.yml\"); .[\$item]))
+            CONFIG=$(cat "${EGG_DIR}/egg.yml" | yq -o=json "$(printf '(.. |
+              with(select(tag == "!!var");
+              . |= (. | to_string | split(".") | .[] as $item ireduce (load("../variables.yml"); .[$item]))
               ) |
-              with(select(tag == \"\!\!in\");
-              . |= (. | to_string | split(\".\") | .[] as \$item ireduce (load(\"../translation.yml\"); .[\$item]))
+              with(select(tag == "!!in");
+              . |= (. | to_string | split(".") | .[] as $item ireduce (load("../translation.yml"); .[$item]))
               ) |
-              with(select(tag == \"\!\!file\");
-              . |= load_str(\"${EGG_DIR}/\" + .)
-              )) |= .");
+              with(select(tag == "!!file");
+              . |= load_str("%s/" + .)
+              )) |= .' $EGG_DIR)");
           
             DATE="$(date '+%Y-%m-%dT%H:%M:%S%:z')";
           
@@ -68,7 +68,6 @@ jobs:
             INSTALL_CONTAINER=$(echo $CONFIG | jq '.install.container // "debian:bookworm-slim"')
             INSTALL_ENTRYPOINT=$(echo $CONFIG | jq '.install.entrypoint // "/bin/bash"');
             INSTALL_SCRIPT=$(echo $CONFIG | jq '.install.script');
-            if [ "$INSTALL_SCRIPT" == "null" ]; then INSTALL_SCRIPT="$(jq -sR '.' <<< $(cat "${EGG_DIR}/install.sh" || true))"; fi
             
             DOCKER_IMAGES=$(echo $CONFIG | jq -c '.images[] | 
               (.tags // [null])[] as $v | {
