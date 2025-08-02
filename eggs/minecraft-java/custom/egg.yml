@@ -1,21 +1,14 @@
 name: Custom
 images:
-  - name: Java {tag}
-    image: 'ghcr.io/faithnode/pterodactyl-images/java:{tag}'
-    tags: !!var tags.java
-  - name: Java Eclipse Temurin {tag}
-    image: 'ghcr.io/faithnode/pterodactyl-images/java-eclipse-temurin:{tag}'
-    tags: !!var tags.java-eclipse-temurin
-  - name: Java OpenJ9 {tag}
-    image: 'ghcr.io/faithnode/pterodactyl-images/java-openj9:{tag}'
-    tags: !!var tags.java-openj9
-  - name: Java FX {tag}
-    image: 'ghcr.io/faithnode/pterodactyl-images/javafx:{tag}'
-    tags: !!var tags.javafx
+  - !!var images.java
+  - !!var images.java-eclipse-temurin
+  - !!var images.java-openj9
+  - !!var images.javafx
 
 install:
   container: debian:buster-slim
   entrypoint: /bin/bash
+  script: !!file install.sh
 
 config:
   cmd: '{{_STARTUP_COMMAND}}'
@@ -27,7 +20,7 @@ variables:
     value: bash run.sh
     rules: required|string|max:1000
   - env: _INSTALL_MINECRAFT_VERSION
-    name: Версия Minecraft
-    description: Список доступных версий можно посмотреть <a href="https://files.minecraftforge.net/net/minecraftforge/forge/" target="_blank">здесь</a>
-    value: 1.21.4
+    name: !!in variables.minecraftVersion.name
+    description: !!in variables.minecraftVersion.description
+    value: latest
     rules: required|string|max:1000
