@@ -1,0 +1,4 @@
+variables:
+  startupCommand:
+    name: Команда запуска
+    description: Команда, которая выполняется при запуске сервера
