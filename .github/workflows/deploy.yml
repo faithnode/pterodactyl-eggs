@@ -31,6 +31,9 @@ jobs:
         run: |
           #!/bin/bash
           
+          if [ -n "$COMMENT" ]; then COMMENT="\"$COMMENT\""; else COMMENT='null'; fi
+          if [ -n "$AUTHOR" ]; then AUTHOR="\"$AUTHOR\""; else AUTHOR="\"admin@faithnode.com\""; fi
+          
           for i in $(find . -name egg.yml); do
             EGG_DIR=$(dirname "$i");
             OUT_DIR=$(dirname "../.dist/${EGG_DIR}")
@@ -51,9 +54,7 @@ jobs:
           
             DATE="$(date '+%Y-%m-%dT%H:%M:%S%:z')";
           
-            if [ -n "$COMMENT" ]; then COMMENT="\"$COMMENT\""; else COMMENT='null'; fi
             if [ -n "$URL" ]; then UPDATE_URL="\"$URL$(dirname $(echo $EGG_DIR | sed 's/^.\///'))/$OUT_NAME.json\""; else UPDATE_URL='null'; fi
-            if [ -n "$AUTHOR" ]; then AUTHOR="\"$AUTHOR\""; else AUTHOR="\"admin@faithnode.com\""; fi
           
             NAME=$(echo $CONFIG | jq '.name')
             DESCRIPTION=$(echo $CONFIG | jq '.description');
