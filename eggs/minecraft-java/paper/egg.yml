@@ -20,8 +20,8 @@ variables:
   - env: _STARTUP_COMMAND
     name: !!in variables.startupCommand.name
     description: !!in variables.startupCommand.description
-    value: bash run.sh
-    rules: required|string|max:1000
+    value: java -Xms128M -XX:MaxRAMPercentage=80 -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar paper*.jar
+    rules: required|string|max:4000
   - env: _INSTALL_PAPER_VERSION
     name: !!in variables.paperVersion.name
     description: !!in variables.paperVersion.description
