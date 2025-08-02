@@ -46,7 +46,7 @@ jobs:
               . |= (. | to_string | split(\".\") | .[] as \$item ireduce (load(\"../translation.yml\"); .[\$item]))
               ) |
               with(select(tag == \"!!file\");
-              . |= (. as \$file | load_str(\"${EGG_DIR}/\$file\"))
+              . |= (. as \$file | load_str(\"${EGG_DIR}/\"+$file))
               )) |= .");
           
             DATE="$(date '+%Y-%m-%dT%H:%M:%S%:z')";
