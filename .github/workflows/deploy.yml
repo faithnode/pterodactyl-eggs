@@ -40,10 +40,10 @@ jobs:
           
             CONFIG=$(cat "${EGG_DIR}/egg.yml" | yq -o=json '(.. |
               with(select(tag == "!!var");
-              . |= (. | to_string | split(".") | .[] as $item ireduce (load("variables.yml"); .[$item]))
+              . |= (. | to_string | split(".") | .[] as $item ireduce (load("../variables.yml"); .[$item]))
               ) |
               with(select(tag == "!!in");
-              . |= (. | to_string | split(".") | .[] as $item ireduce (load("translation.yml"); .[$item]))
+              . |= (. | to_string | split(".") | .[] as $item ireduce (load("../translation.yml"); .[$item]))
               )) |= .');
           
             DATE="$(date '+%Y-%m-%dT%H:%M:%S%:z')";
