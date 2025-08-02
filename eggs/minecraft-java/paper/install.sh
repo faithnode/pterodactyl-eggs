@@ -1,6 +1,8 @@
 #!/bin/bash
 
-apt install -y curl jq
+mkdir -p /mnt/server/ && cd /mnt/server/;
+
+apt update && apt install -y curl jq
 
 if [[ -z $_INSTALL_PAPER_VERSION || ${_INSTALL_PAPER_VERSION,,} == "latest" ]]; then
   echo -e "Getting latest version";
