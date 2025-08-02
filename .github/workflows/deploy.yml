@@ -76,6 +76,8 @@ jobs:
               rules: (.rules // "string"),
               field_type: (.type // "text")
             })');
+            FEATURES=$(echo $CONFIG | jq -c '.features // []');
+            DENYLIST=$(echo $CONFIG | jq -c '.config.denylist // []');
 
             jq . > "${OUT_DIR}/${OUT_NAME}.json" << EOF
             {
@@ -87,9 +89,9 @@ jobs:
               "name": ${NAME},
               "author": ${AUTHOR},
               "description": ${DESCRIPTION},
-              "features": null,
+              "features": ${FEATURES},
               "docker_images": ${DOCKER_IMAGES},
-              "file_denylist": [],
+              "file_denylist": ${DENYLIST},
               "startup": ${CMD},
               "config": {
                   "files": ${FILES},
