@@ -7,6 +7,14 @@ install:
 
 config:
   cmd: '{{_STARTUP_COMMAND}}'
+  startup:
+    done: "! For help, type"
+  files:
+    "server.properties":
+      parser: properties
+      find:
+        server-ip: "0.0.0.0"
+        server-port: "{{server.build.default.port}}"
 
 variables:
   - env: _STARTUP_COMMAND
