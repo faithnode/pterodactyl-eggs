@@ -1,9 +1,6 @@
-name: Custom
+name: Paper
 images:
   - !!var images.java
-  - !!var images.java-eclipse-temurin
-  - !!var images.java-openj9
-  - !!var images.javafx
 
 install:
   script: !!file install.sh
@@ -16,4 +13,9 @@ variables:
     name: !!in variables.startupCommand.name
     description: !!in variables.startupCommand.description
     value: bash run.sh
+    rules: required|string|max:1000
+  - env: _INSTALL_PAPER_VERSION
+    name: !!in variables.paperVersion.name
+    description: !!in variables.paperVersion.description
+    value: latest
     rules: required|string|max:1000
