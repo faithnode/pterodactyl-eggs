@@ -13,7 +13,7 @@ config:
     "velocity.toml":
       parser: file
       find:
-        "bind = ": "bind = 0.0.0.0:{{server.build.default.port}}"
+        "bind = ": "bind = \"0.0.0.0:{{server.build.default.port}}\""
 
 variables:
   - env: _STARTUP_COMMAND
