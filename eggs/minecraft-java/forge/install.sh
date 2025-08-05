@@ -9,13 +9,13 @@ if [[ -z $VERSION || ${VERSION,,} == "latest" ]]; then
   echo -e "Getting latest version";
   MINECRAFT_VERSION="$(echo "$PROMOTIONS" | jq -r '.promos | to_entries | last | .key')";
 else
-  MINECRAFT_VERSION=$(echo "$PROMOTIONS" | jq -r "$(printf '.promos | to_entries | last(.[] | select(.key | startswith("%s"))) | .key' "$_INSTALL_MINECRAFT_VERSION")");
-  if [[ -z "$FORGE_VERSION" ]]; then
-    fatal "Version $VERSION not found";
-  fi
+  MINECRAFT_VERSION=$(echo "$PROMOTIONS" | jq -r "$(printf '.promos | to_entries | last(.[] | select(.key | startswith("%s"))) | .key' "$VERSION")");
 fi
 
 FORGE_VERSION="$(echo "$PROMOTIONS" | jq -r "$(printf '.promos["%s"]' "$MINECRAFT_VERSION")")";
+if [[ -z "$FORGE_VERSION" ]]; then
+  fatal "Version $VERSION not found";
+fi
 MINECRAFT_VERSION="${MINECRAFT_VERSION%%-*}";
 
 INSTALLER_JARFILE="forge-$MINECRAFT_VERSION-$FORGE_VERSION-installer.jar";
