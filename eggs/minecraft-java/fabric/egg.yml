@@ -15,7 +15,7 @@ variables:
   - env: _STARTUP_COMMAND
     name: !!in variables.startupCommand.name
     description: !!in variables.startupCommand.description
-    value: bash run.sh
+    value: java -Xms128M -XX:MaxRAMPercentage=80 -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar fabric*.jar
     rules: required|string|max:4000
   - env: _INSTALL_MINECRAFT_VERSION
     name: !!in variables.fabricVersion.name
