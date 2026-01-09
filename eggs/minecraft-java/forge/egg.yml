@@ -4,7 +4,7 @@ images:
 
 install:
   script: !!file install.sh
-  container: 'openjdk:21-jdk-slim'
+  container: 'eclipse-temurin:25-jdk'
 
 config:
   cmd: '{{_STARTUP_COMMAND}}'
