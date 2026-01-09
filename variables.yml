@@ -3,10 +3,6 @@ images:
     name: Java {tag}
     image: 'ghcr.io/faithnode/pterodactyl-images/java:{tag}'
     tags: [ 21,8,11,15,16,17,18,19,20,22,23,24,25,26 ]
-  java-eclipse-temurin:
-    name: Java Eclipse Temurin {tag}
-    image: 'ghcr.io/faithnode/pterodactyl-images/java-eclipse-temurin:{tag}'
-    tags: [ 21,8,11,16,17,18,19,20,21,22,25 ]
   java-openj9:
     name: Java OpenJ9 {tag}
     image: 'ghcr.io/faithnode/pterodactyl-images/java-openj9:{tag}'

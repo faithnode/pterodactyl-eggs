@@ -1,7 +1,6 @@
 name: Custom
 images:
   - !!var images.java
-  - !!var images.java-eclipse-temurin
   - !!var images.java-openj9
   - !!var images.javafx
 
