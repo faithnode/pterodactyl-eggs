@@ -4,20 +4,6 @@ ROOT="$(realpath "$(dirname "$(realpath "$0")")/..")"
 VARIABLES="$ROOT/variables.yml"
 TRANSLATION="$ROOT/translation.yml"
 
-SCRIPTS="{}"
-
-while IFS= read -r -d '' file
-do
-  SCRIPTS="$(
-    echo "$SCRIPTS" | jq \
-      --arg file "$(cat "$file")" \
-      --arg name "$(basename "$file" .sh)" \
-      --arg type "$(basename "$(dirname "$file")")" \
-      '. * {($type): {($name): $file}}'
-  )";
-done < <(find "$ROOT/scripts" -name '*.sh' -print0);
-
-
 PAGES=[]
 
 while IFS= read -r -d '' file
@@ -54,7 +40,6 @@ do
   fi
 
   echo "$CONFIG" | jq \
-  --argjson scripts "$SCRIPTS" \
   "$(
     printf '
       def nullable: if . == "" or . == "null" or . == null then null else . end;
@@ -94,7 +79,7 @@ do
             (.install.entrypoint // "/bin/bash") as $entrypoint |
             (.install.script | if ((. // "") | type) == "string" then . = [.] else . end) as $script |
             {
-              script: [($scripts["install"][($container | split(":") | .[0])] // ""),$script[]] | join("\n"),
+              script: ($script | join("\n")),
               container: $container,
               entrypoint: $entrypoint,
             }
