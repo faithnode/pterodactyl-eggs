@@ -23,7 +23,7 @@ do
   mkdir -p "${OUT_DIR}";
 
   CONFIG="$(
-    yq -o=json eval "$(printf '
+    yq eval -o=json "$(printf '
       (.. |
         with(select(tag == "!!var");
           . |= (. | to_string | split(".") | .[] as $item ireduce (load("%s"); .[$item]))
@@ -33,7 +33,7 @@ do
         ) |
         with(select(tag == "!!file");
           . |= (
-            if (. | test("^/"))
+            if (startswith("/"))
             then load_str("%s" + .)
             else load_str("%s/" + .)
             end
