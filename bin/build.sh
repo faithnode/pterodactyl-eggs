@@ -1,60 +1,57 @@
 #!/bin/bash
 
+set -euo pipefail
+
+URL="${URL:-}"
+COMMENT="${COMMENT:-}"
+AUTHOR="${AUTHOR:-admin@faithnode.com}"
 ROOT="$(realpath "$(dirname "$(realpath "$0")")/..")"
 VARIABLES="$ROOT/variables.yml"
 TRANSLATION="$ROOT/translation.yml"
 
-SCRIPTS="{}"
+PAGES='[]'
+
+mkdir -p "$ROOT/.dist"
 
 while IFS= read -r -d '' file
 do
-  SCRIPTS="$(
-    echo "$SCRIPTS" | jq \
-      --arg file "$(cat "$file")" \
-      --arg name "$(basename "$file" .sh)" \
-      --arg type "$(basename "$(dirname "$file")")" \
-      '. * {($type): {($name): $file}}'
-  )";
-done < <(find "$ROOT/scripts" -name '*.sh' -print0);
-
-
-PAGES=[]
-
-while IFS= read -r -d '' file
-do
-  EGG_DIR=$(dirname "$file");
-  URL_PATH=$(dirname "$(realpath --relative-base "$ROOT/eggs" "$EGG_DIR")");
+  EGG_DIR="$(dirname "$file")"
+  URL_PATH="$(realpath --relative-base "$ROOT/eggs" "$EGG_DIR")"
   OUT_DIR="$ROOT/.dist/$URL_PATH";
-  OUT_NAME=$(basename "$EGG_DIR.json");
+  OUT_NAME="$(basename "$EGG_DIR").json"
 
   mkdir -p "${OUT_DIR}";
 
-  CONFIG=$(< "${EGG_DIR}/egg.yml" yq -o=json "$(
-    printf '
+  CONFIG="$(
+    yq -o=json eval "$(printf '
       (.. |
-      with(select(tag == "!!var");
-      . |= (. | to_string | split(".") | .[] as $item ireduce (load("%s"); .[$item]))
-      ) |
-      with(select(tag == "!!in");
-      . |= (. | to_string | split(".") | .[] as $item ireduce (load("%s"); .[$item]))
-      ) |
-      with(select(tag == "!!file");
-      . |= load_str("%s/" + .)
-      )) |= .
-      ' \
-      "$VARIABLES" \
-      "$TRANSLATION" \
-      "$EGG_DIR"
-    )
-  ");
+        with(select(tag == "!!var");
+          . |= (. | to_string | split(".") | .[] as $item ireduce (load("%s"); .[$item]))
+        ) |
+        with(select(tag == "!!in");
+          . |= (. | to_string | split(".") | .[] as $item ireduce (load("%s"); .[$item]))
+        ) |
+        with(select(tag == "!!file");
+          . |= (
+            if (. | test("^/"))
+            then load_str("%s" + .)
+            else load_str("%s/" + .)
+            end
+          )
+        )
+      )
+    ' "$VARIABLES" "$TRANSLATION" "$ROOT" "$EGG_DIR")" \
+      "$EGG_DIR/egg.yml"
+  )"
 
+  UPDATE_URL=""
   if [ -n "$URL" ]; then
-    UPDATE_URL="${URL%/}/$URL_PATH/$OUT_NAME";
-    PAGES="$(echo "$PAGES" | jq "$(printf '. += ["%s"]' "$UPDATE_URL")")";
+    UPDATE_URL="${URL%/}/$URL_PATH/$OUT_NAME"
+    PAGES="$(echo "$PAGES" | jq "$(printf '. += ["%s"]' "$UPDATE_URL")")"
   fi
 
+
   echo "$CONFIG" | jq \
-  --argjson scripts "$SCRIPTS" \
   "$(
     printf '
       def nullable: if . == "" or . == "null" or . == null then null else . end;
@@ -92,11 +89,18 @@ do
           installation: (
             (.install.container // "debian:bookworm-slim") as $container |
             (.install.entrypoint // "/bin/bash") as $entrypoint |
-            (.install.script | if ((. // "") | type) == "string" then . = [.] else . end) as $script |
+            (
+              .install.script
+              | if . == null then []
+                elif type == "string" then [ . ]
+                elif type == "array" then .
+                else []
+                end
+            ) as $scriptParts |
             {
-              script: [($scripts["install"][($container | split(":") | .[0])] // ""),$script[]] | join("\n"),
+              script: ($scriptParts | join("\n\n")),
               container: $container,
-              entrypoint: $entrypoint,
+              entrypoint: $entrypoint
             }
           )
         },
