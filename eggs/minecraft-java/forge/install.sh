@@ -1,7 +1,5 @@
 #!/bin/bash
 
-apt update -y && apt install -y jq curl;
-
 VERSION=$_INSTALL_MINECRAFT_VERSION;
 
 echo -e "Getting promotions";
