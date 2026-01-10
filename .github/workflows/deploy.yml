@@ -30,6 +30,10 @@ jobs:
         run: |
           bash bin/build.sh
 
+      - name: Generate Index
+        run: |
+          bash bin/index.sh
+
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
