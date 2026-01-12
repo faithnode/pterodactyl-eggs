@@ -1,0 +1,81 @@
+name: Subnautica
+description: Subnautica is an open world survival action-adventure video game.
+author: tueye@tuworld.de
+images:
+  - !!var images.mono_core
+
+install:
+  script: !!file install.sh
+  container: "debian:buster-slim"
+  entrypoint: "bash"
+
+config:
+  stop: "stop"
+  startup:
+    done: "Server started"
+  files:
+    "server.cfg":
+      parser: properties
+      find:
+        "ServerPort": "{{server.build.default.port}}"
+        "SaveInterval": "{{server.build.env.SAVE_INTERVAL}}"
+        "DisableAutoSave": "{{server.build.env.SAVE_DISABLE}}"
+        "SaveName": "{{server.build.env.SAVE_NAME}}"
+        "ServerPassword": "{{server.build.env.SUBNAUTICA_PASSWORD}}"
+        "AdminPassword": "{{server.build.env.SUBNAUTICA_ADMIN_PASSWORD}}"
+        "GameMode": "{{server.build.env.SERVER_MODE}}"
+        "AutoPortForward": "{{server.build.env.PORTFORWARD_ENABLE}}"
+        "SerializerMode": "{{server.build.env.SERIALIZER_MODE}}"
+
+startup: mono ./nitrox/NitroxServer-Subnautica.exe
+
+variables:
+  - name: APP ID
+    env: APPID
+    default: "264710"
+    rules: required|numeric|digits_between:1,6
+    permissions:
+      view: false
+      edit: false
+  - name: Steam-Username
+    env: STEAM_USERNAME
+    default: ""
+  - name: Steam-Password
+    env: STEAM_PASSWORD
+    default: ""
+  - name: Steam-GuardCode
+    env: STEAM_GUARDCODE
+    default: ""
+  - name: Nitrox Version
+    env: NITROX_VERSION
+    default: "latest"
+  - name: Auto Save Interval
+    env: SAVE_INTERVAL
+    default: "120000"
+  - name: Disable Auto Save
+    env: SAVE_DISABLE
+    default: "False"
+  - name: Save Name
+    env: SAVE_NAME
+    default: "world"
+  - name: Server Password
+    env: SUBNAUTICA_PASSWORD
+    default: ""
+  - name: Admin Password
+    env: SUBNAUTICA_ADMIN_PASSWORD
+    default: "PleaseChangeMe"
+  - name: Game Mode
+    env: SERVER_MODE
+    default: "SURVIVAL"
+  - name: Auto Portforward via UPnP
+    env: PORTFORWARD_ENABLE
+    default: "False"
+    permissions:
+      view: false
+      edit: false
+  - name: Serializer Mode
+    env: SERIALIZER_MODE
+    default: "JSON"
+    permissions:
+      view: false
+      edit: false

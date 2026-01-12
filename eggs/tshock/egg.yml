@@ -1,0 +1,32 @@
+name: tshock
+author: parker@parkervcp.com
+images:
+  - !!var images.mono_core
+
+install:
+  script: !!file install.sh
+  container: "debian:buster-slim"
+  entrypoint: "/bin/bash"
+
+config:
+  stop: "exit"
+  startup:
+    done: "Type 'help' for a list of commands"
+    userInteraction: []
+  logs:
+    custom: false
+    location: "ServerLog.txt"
+  files:
+    "tshock/config.json":
+      parser: json
+      find: {}
+
+startup: mono TerrariaServer.exe -ip 0.0.0.0 -port {{SERVER_PORT}}
+
+variables:
+  - name: Версия Tshock
+    env: TSHOCK_VERSION
+    default: "latest"
+    permissions:
+      view: true
+      edit: false

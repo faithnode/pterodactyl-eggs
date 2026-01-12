@@ -1,0 +1,15 @@
+name: .NET
+images:
+  - !!var images.dotnet
+
+install:
+  script: !!file install.sh
+  container: "debian:buster-slim"
+  entrypoint: "bash"
+
+config:
+  stop: "^C"
+  startup:
+    done: ""
+
+startup: bash ./start.sh

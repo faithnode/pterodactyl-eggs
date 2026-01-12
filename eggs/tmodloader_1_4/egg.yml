@@ -1,0 +1,66 @@
+name: tModloader 1.4
+author: parker@parkervcp.com
+description: "tModLoader for Terraria 1.4+"
+images:
+  - !!var images.yolks_dotnet_6
+
+install:
+  script: !!file install.sh
+  container: "ghcr.io/parkervcp/installers:debian"
+  entrypoint: "bash"
+
+config:
+  stop: "exit"
+  startup:
+    done: "Type 'help' for a list of commands"
+  files:
+    "serverconfig.txt":
+      parser: file
+      find:
+        "difficulty": "difficulty={{server.build.env.DIFFICULTY}}"
+
+startup: ./tModLoaderServer -ip 0.0.0.0 -port {{SERVER_PORT}} -maxplayers {{MAX_PLAYERS}} -password "{{SERVER_PASSWORD}}" -motd "{{MOTD}}" -lang {{LANGUAGE}} -world ~/saves/Worlds/{{WORLD_NAME}}.wld -worldname {{WORLD_NAME}} -autocreate {{WORLD_SIZE}} -config serverconfig.txt -savedirectory ~/ -tmlsavedirectory ~/saves -modpath ~/mods
+
+variables:
+  - name: World Name
+    env: WORLD_NAME
+    default: "world"
+  - name: Max Players
+    env: MAX_PLAYERS
+    default: "8"
+    permissions:
+      view: true
+      edit: false
+  - name: World Size
+    env: WORLD_SIZE
+    default: "1"
+    rules: required|string|in:1,2,3
+  - name: tModloader Version
+    env: VERSION
+    default: "latest"
+  - name: GitHub User
+    env: GITHUB_USER
+    default: ""
+    permissions:
+      view: false
+      edit: false
+  - name: GitHub OAuth Token
+    env: GITHUB_OAUTH_TOKEN
+    default: ""
+    permissions:
+      view: false
+      edit: false
+  - name: Difficulty
+    env: DIFFICULTY
+    default: "0"
+    rules: required|string|in:0,1,2,3
+  - name: Server Password
+    env: SERVER_PASSWORD
+    default: ""
+  - name: MOTD
+    env: MOTD
+    default: "Please don’t cut the purple trees!"
+  - name: Language
+    env: LANGUAGE
+    default: "1"
+    rules: required|string|in:1,2,3,4,5

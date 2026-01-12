@@ -1,0 +1,23 @@
+name: MariaDB
+description: One of the most popular database servers. Made by the original developers of MySQL. Guaranteed to stay open source.
+author: parker@parkervcp.com
+images:
+  - !!var images.mariadb
+
+install:
+  script: !!file install.sh
+  container: "mariadb:10.3"
+  entrypoint: "bash"
+
+config:
+  stop: "shutdown; exit;"
+  startup:
+    done: "mysqld: ready for connections"
+  files:
+    ".my.cnf":
+      parser: file
+      find:
+        "port": "port = {{server.build.default.port}}"
+        "bind-address": "bind-address=0.0.0.0"
+
+startup: "{ /usr/sbin/mysqld & } && sleep 5 && mysql -u root"

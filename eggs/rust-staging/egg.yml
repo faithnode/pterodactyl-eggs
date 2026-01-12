@@ -1,0 +1,71 @@
+name: Rust Staging
+description: The only aim in Rust is to survive.
+author: root@smc.li
+images:
+  - !!var images.rust_core
+
+install:
+  script: !!file install.sh
+  container: "debian:buster-slim"
+  entrypoint: "bash"
+
+config:
+  stop: "quit"
+  startup:
+    done: "Server startup complete"
+    userInteraction: []
+  logs:
+    custom: false
+    location: "latest.log"
+
+startup: ./RustDedicated -batchmode +server.port {{SERVER_PORT}} +server.identity "rust" +rcon.port {{RCON_PORT}} +rcon.web true +server.hostname "{{HOSTNAME}}" +server.level "{{LEVEL}}" +server.description "{{DESCRIPTION}}" +server.url "{{SERVER_URL}}" +server.headerimage "{{SERVER_IMG}}" +server.worldsize "{{WORLD_SIZE}}" +server.seed "{{WORLD_SEED}}" +server.maxplayers {{MAX_PLAYERS}} +rcon.password "{{RCON_PASS}}" +server.saveinterval {{SAVEINTERVAL}} {{ADDITIONAL_ARGS}}
+
+variables:
+  - name: Server Name
+    env: HOSTNAME
+    default: "A Rust Staging Server"
+  - name: Level
+    env: LEVEL
+    default: "Procedural Map"
+  - name: Description
+    env: DESCRIPTION
+    default: "Powered by Pterodactyl"
+  - name: URL
+    env: SERVER_URL
+    default: "http://pterodactyl.io"
+  - name: World Size
+    env: WORLD_SIZE
+    default: "3000"
+  - name: World Seed
+    env: WORLD_SEED
+    default: ""
+  - name: Max Players
+    env: MAX_PLAYERS
+    default: "50"
+  - name: Server Image
+    env: SERVER_IMG
+    default: ""
+  - name: RCON Port
+    env: RCON_PORT
+    default: "28016"
+    permissions:
+      view: true
+      edit: false
+  - name: RCON Password
+    env: RCON_PASS
+    default: "CHANGEME"
+  - name: Save Interval
+    env: SAVEINTERVAL
+    default: "60"
+  - name: Branch
+    env: BRANCH
+    default: "staging"
+  - name: App Port
+    env: APP_PORT
+    default: "28082"
+    permissions:
+      view: true
+      edit: false
+  - name: Server Logo
+    env: SERVER_LOGO
+    default: ""

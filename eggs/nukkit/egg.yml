@@ -1,0 +1,42 @@
+name: Nukkit
+description: |
+  Nukkit is a Nuclear-Powered Server Software For Minecraft: Pocket Edition
+  https://nukkit.io/
+author: parker@parkervcp.com
+images:
+  - !!var images.nukkit
+
+install:
+  script: !!file install.sh
+  container: "alpine:3.10"
+  entrypoint: "ash"
+
+config:
+  stop: "stop"
+  startup:
+    done: ")! For help, type "
+  logs:
+    custom: false
+    location: "logs/latest.log"
+  files:
+    "server.properties":
+      parser: properties
+      find:
+        "server-ip": "0.0.0.0"
+        "enable-query": "true"
+        "server-port": "{{server.build.default.port}}"
+        "query.port": "{{server.build.default.port}}"
+
+startup: java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}
+
+variables:
+  - name: Файл ядра сервера
+    description: Название файла ядра сервера
+    env: SERVER_JARFILE
+    default: "server.jar"
+    rules: required|regex:/^([\w\d._-]+)(\.jar)$/
+  - name: Версия Nukkit
+    description: Версия ядра сервера. По умолчанию используется последняя версия
+    env: NUKKIT_VERSION
+    default: "latest"
+    rules: required|string|max:20

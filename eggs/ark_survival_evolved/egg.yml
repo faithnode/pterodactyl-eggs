@@ -1,0 +1,53 @@
+name: Survival Evolved
+author: dev@shepper.fr
+features:
+  - steam_disk_space
+images:
+  - !!var images.games_source
+
+install:
+  script: !!file install.sh
+  container: "ghcr.io/parkervcp/installers:debian"
+  entrypoint: "bash"
+
+config:
+  stop: "^C"
+  startup:
+    done: "Waiting commands for 127.0.0.1:"
+
+startup: rmv() { echo -e "stopping server"; rcon -t rcon -a 127.0.0.1:${RCON_PORT} -p ${ARK_ADMIN_PASSWORD} -c saveworld && rcon -a 127.0.0.1:${RCON_PORT} -p ${ARK_ADMIN_PASSWORD} -c DoExit; }; trap rmv 15; cd ShooterGame/Binaries/Linux && ./ShooterGameServer {{SERVER_MAP}}?listen?SessionName="{{SESSION_NAME}}"?ServerPassword={{ARK_PASSWORD}}?ServerAdminPassword={{ARK_ADMIN_PASSWORD}}?Port={{SERVER_PORT}}?RCONPort={{RCON_PORT}}?QueryPort={{QUERY_PORT}}?RCONEnabled=True?GameModIds={{MOD_ID}}$( [ "$BATTLE_EYE" == "1" ] || printf %s ' -NoBattlEye' ) -server -automanagedmods {{ARGS}} -log & until echo "waiting for rcon connection..."; rcon -t rcon -a 127.0.0.1:${RCON_PORT} -p ${ARK_ADMIN_PASSWORD}; do sleep 5; done
+
+variables:
+  - name: Server Password
+    env: ARK_PASSWORD
+    default: ""
+  - name: Admin Password
+    env: ARK_ADMIN_PASSWORD
+    default: "PleaseChangeMe"
+  - name: Server Map
+    env: SERVER_MAP
+    default: "TheIsland"
+  - name: Server Name
+    env: SESSION_NAME
+    default: "A Pterodactyl Hosted ARK Server"
+  - name: Rcon Port
+    env: RCON_PORT
+    default: "27020"
+  - name: Query Port
+    env: QUERY_PORT
+    default: "27015"
+  - name: Auto-update server
+    env: AUTO_UPDATE
+    default: "0"
+  - name: Battle Eye
+    env: BATTLE_EYE
+    default: "1"
+  - name: Mods
+    env: MOD_ID
+    default: ""
+  - name: App ID
+    env: SRCDS_APPID
+    default: "376030"
+  - name: Additional Arguments
+    env: ARGS
+    default: ""

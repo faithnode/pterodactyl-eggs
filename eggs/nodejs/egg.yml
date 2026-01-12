@@ -1,0 +1,16 @@
+name: Node.js
+images:
+  - !!var images.nodejs
+  - !!var images.bun
+
+install:
+  script: !!file install.sh
+  container: "debian:buster-slim"
+  entrypoint: "bash"
+
+config:
+  stop: "^c"
+  startup:
+    done: ""
+
+startup: bash ./start.sh

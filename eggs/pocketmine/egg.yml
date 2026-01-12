@@ -1,0 +1,38 @@
+name: Pocketmine
+description: |
+  Pocketmine Egg
+  by onekintaro from swisscrafting.ch
+  with the nice help from #eggs Channel on Pterodactyl-Discord :)
+author: info@swisscrafting.ch
+images:
+  - !!var images.bedrock_yolk
+
+install:
+  script: !!file install.sh
+  container: "ghcr.io/parkervcp/installers:debian"
+  entrypoint: "bash"
+
+config:
+  stop: "stop"
+  startup:
+    done: ")! For help, type "
+  logs:
+    custom: false
+    location: "server.log"
+  files:
+    "server.properties":
+      parser: properties
+      find:
+        "server-ip": "0.0.0.0"
+        "enable-query": "true"
+        "server-port": "{{server.build.default.port}}"
+        "query.port": "{{server.build.default.port}}"
+
+startup: ./bin/php7/bin/php ./PocketMine-MP.phar --no-wizard --disable-ansi
+
+variables:
+  - name: PocketmineMP Version
+    description: Version from Github
+    env: VERSION
+    default: "PM5"
+    rules: required|string|in:PM5,PM4

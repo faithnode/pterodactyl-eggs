@@ -3,7 +3,9 @@ images:
   - !!var images.java
 
 install:
-  script: !!file install.sh
+  script:
+    - !!file ../../../scripts/install/debian.sh
+    - !!file install.sh
 
 config:
   cmd: '{{_STARTUP_COMMAND}}'

@@ -1,0 +1,27 @@
+name: Terraria Vanilla
+author: iamkubi@gmail.com
+images:
+  - !!var images.base_debian
+
+install:
+  script: !!file install.sh
+  container: "debian:buster-slim"
+  entrypoint: "bash"
+
+config:
+  stop: "exit"
+  startup:
+    done: "Type 'help' for a list of commands"
+  files:
+    "serverconfig.txt":
+      parser: properties
+      find:
+        "worldpath": "/home/container/saves/Worlds"
+        "port": "{{server.build.default.port}}"
+
+startup: ./TerrariaServer.bin.x86_64 -config serverconfig.txt
+
+variables:
+  - name: Версия Terraria
+    env: TERRARIA_VERSION
+    default: "latest"

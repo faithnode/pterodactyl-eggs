@@ -3,7 +3,9 @@ images:
   - !!var images.java
 
 install:
-  script: !!file install.sh
+  script:
+    - !!file ../../../scripts/install/eclipse-temurin.sh
+    - !!file install.sh
   container: 'eclipse-temurin:25-jdk'
 
 config:

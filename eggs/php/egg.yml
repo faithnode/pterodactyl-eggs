@@ -1,0 +1,15 @@
+name: PHP
+images:
+  - !!var images.php
+
+install:
+  script: !!file install.sh
+  container: "alpine:3.4"
+  entrypoint: "ash"
+
+config:
+  stop: "^c"
+  startup:
+    done: ""
+
+startup: ./start.sh
