@@ -1,0 +1,32 @@
+name: Team Fortress 2 Classic
+author: eggs@scattergun.io
+images:
+  - !!var images.debian_base
+
+install:
+  script: !!file install.sh
+  container: "ubuntu:18.04"
+  entrypoint: "bash"
+
+config:
+  stop: "quit"
+  startup:
+    done: "gameserver Steam ID"
+    userInteraction: []
+  logs:
+    custom: true
+    location: "logs/latest.log"
+
+startup: ./srcds_run -game {{SRCDS_GAME}} -console -port {{SERVER_PORT}} +map {{SRCDS_MAP}} +ip {{SERVER_IP}} -strictportbind -norestart -debug +maxplayers {{MAXPLAYERS}}
+
+variables:
+  - name: Карта
+    env: SRCDS_MAP
+    default: "ctf_2fort"
+    rules: required|regex:/^(\w{1,20})$/
+  - name: Версия сервера
+    env: GAMEVERSION
+    default: "2.0.1"
+  - name: Максимальное количество игроков
+    env: MAXPLAYERS
+    default: "24"

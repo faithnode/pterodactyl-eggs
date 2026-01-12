@@ -1,0 +1,17 @@
+name: Java
+images:
+  - !!var images.java
+  - !!var images.java_openj9
+  - !!var images.javafx
+
+install:
+  script: !!file install.sh
+  container: "alpine:3.4"
+  entrypoint: "ash"
+
+config:
+  stop: "^C"
+  startup:
+    done: ""
+
+startup: bash ./start.sh

@@ -1,0 +1,85 @@
+name: The Forest
+author: admin@softwarenoob.com
+images:
+  - !!var images.wine
+
+install:
+  script: !!file install.sh
+  container: "ghcr.io/parkervcp/installers:debian"
+  entrypoint: "bash"
+
+config:
+  stop: "^C"
+  startup:
+    done: "Game autosave started"
+  files:
+    "/TheForestDedicatedServer_Data/forest/config/config.cfg":
+      parser: file
+      find:
+        "serverIP": "serverIP 0.0.0.0"
+        "serverSteamPort": "serverSteamPort {{server.build.env.STEAM_PORT}}"
+        "serverGamePort": "serverGamePort {{server.build.default.port}}"
+        "serverQueryPort": "serverQueryPort {{server.build.env.QUERY_PORT}}"
+        "serverName": "serverName {{server.build.env.SERVER_NAME}}"
+        "serverPlayers": "serverPlayers {{server.build.env.MAX_PLAYERS}}"
+        "serverPassword": "serverPassword {{server.build.env.SERVER_PASS}}"
+        "serverPasswordAdmin": "serverPasswordAdmin {{server.build.env.ADMIN_PASS}}"
+        "serverSteamAccount": "serverSteamAccount {{server.build.env.STEAM_ACC}}"
+        "enableVAC": "enableVAC {{server.build.env.VAC}}"
+        "difficulty": "difficulty {{server.build.env.SERVER_DIFFICULTY}}"
+
+startup: xvfb-run --auto-servernum --server-args='-screen 0 640x480x24:32' wine64 /home/container/TheForestDedicatedServer.exe -batchmode -nographics -nosteamclient -savefolderpath /home/container/TheForestDedicatedServer_Data -configfilepath /home/container/TheForestDedicatedServer_Data/forest/config/config.cfg |grep -v 'RenderTexture.Create failed: format unsupported - 2.'
+
+variables:
+  - name: APP ID
+    env: SRCDS_APPID
+    default: "556450"
+    permissions:
+      view: false
+      edit: false
+  - name: Server Name
+    env: SERVER_NAME
+    default: "Pterodactyl Forest Server"
+  - name: Steam Port
+    env: STEAM_PORT
+    default: "8766"
+    permissions:
+      view: true
+      edit: false
+  - name: Query Port
+    env: QUERY_PORT
+    default: "27016"
+    permissions:
+      view: true
+      edit: false
+  - name: Max Players
+    env: MAX_PLAYERS
+    default: "10"
+    permissions:
+      view: true
+      edit: false
+  - name: Difficulty
+    env: SERVER_DIFFICULTY
+    default: "Normal"
+    rules: required|string|in:Peaceful,Normal,Hard
+  - name: Steam Account Token
+    env: STEAM_ACC
+    default: ""
+  - name: Server Password
+    env: SERVER_PASS
+    default: ""
+  - name: Admin Password
+    env: ADMIN_PASS
+    default: "cHanGetHePaSwWord"
+  - name: Enable VAC
+    env: VAC
+    default: "off"
+  - name: Windows Install
+    env: WINDOWS_INSTALL
+    default: "1"
+    permissions:
+      view: false
+      edit: false
+  - name: Auto-Update
+    env: AUTO_UPDATE
+    default: "1"

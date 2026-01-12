@@ -1,0 +1,20 @@
+name: Unturned
+author: parker@parkervcp.com
+images:
+  - !!var images.debian_source
+
+install:
+  script: !!file install.sh
+  container: "debian:buster-slim"
+  entrypoint: "bash"
+
+config:
+  stop: "shutdown"
+  startup:
+    done: "Loading level: 100%"
+    userInteraction: []
+  logs:
+    custom: true
+    location: "latest.log"
+
+startup: ./Unturned_Headless.x86_64 -batchmode -nographics -bind 0.0.0.0 -port {{SERVER_PORT}}

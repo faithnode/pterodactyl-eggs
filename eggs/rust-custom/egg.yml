@@ -1,0 +1,21 @@
+name: Rust Custom
+author: admin@faithnode.host
+images:
+  - !!var images.rust_core
+
+install:
+  script: !!file install.sh
+  container: "debian:buster-slim"
+  entrypoint: "bash"
+
+config:
+  stop: "^C"
+  startup:
+    done: ""
+
+startup: {{_STARTUP_COMMAND}}
+
+variables:
+  - name: Параметры запуска
+    env: _STARTUP_COMMAND
+    default: "bash start.sh"

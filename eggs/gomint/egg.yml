@@ -1,0 +1,21 @@
+name: GoMint
+author: parker@parkervcp.com
+images:
+  - !!var images.java
+
+install:
+  script: !!file install.sh
+  container: "debian:buster-slim"
+  entrypoint: "bash"
+
+config:
+  stop: "stop"
+  startup:
+    done: "Done in "
+  files:
+    "server.yml":
+      parser: yml
+      find:
+        "listener.port": "{{server.build.default.port}}"
+
+startup: java --add-opens java.base/java.nio=io.netty.common --add-exports java.base/jdk.internal.misc=io.netty.common -p modules -m gomint.server/io.gomint.server.Bootstrap

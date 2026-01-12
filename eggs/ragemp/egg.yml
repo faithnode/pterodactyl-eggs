@@ -1,0 +1,43 @@
+name: Rage.MP
+description: https://rage.mp/
+author: noreply.waypointhosting@gmail.com
+images:
+  - !!var images.ragemp
+
+install:
+  script: !!file install.sh
+  container: "debian:stable-slim"
+  entrypoint: "bash"
+
+config:
+  stop: "^X"
+  startup:
+    done: "The server is ready to accept connections"
+  logs:
+    custom: true
+    location: "logs/latest.log"
+  files:
+    "conf.json":
+      parser: json
+      find:
+        "bind": "0.0.0.0"
+        "port": "{{server.build.default.port}}"
+        "name": "{{server.build.env.SERVER_NAME}}"
+        "maxplayers": "{{server.build.env.MAX_PLAYERS}}"
+        "announce": "{{server.build.env.ANNOUNCE}}"
+
+startup: ./ragemp-server
+
+variables:
+  - name: Server Name
+    env: SERVER_NAME
+    default: "RAGE:MP Unofficial server"
+  - name: Max Players
+    env: MAX_PLAYERS
+    default: "50"
+    permissions:
+      view: true
+      edit: false
+  - name: Announce
+    env: ANNOUNCE
+    default: "0"

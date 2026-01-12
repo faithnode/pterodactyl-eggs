@@ -1,0 +1,22 @@
+name: Redis
+description: Redis is an open source (BSD licensed), in-memory data structure store.
+author: parker@parkervcp.com
+images:
+  - !!var images.redis_6
+
+install:
+  script: !!file install.sh
+  container: "ghcr.io/parkervcp/installers:alpine"
+  entrypoint: "ash"
+
+config:
+  stop: "^C"
+  startup:
+    done: "Configuration loaded"
+
+startup: /usr/local/bin/redis-server /home/container/redis.conf --save 60 1 --dir /home/container/ --bind 0.0.0.0 --port {{SERVER_PORT}} --requirepass {{SERVER_PASSWORD}} --maxmemory {{SERVER_MEMORY}}mb --daemonize yes && redis-cli -p {{SERVER_PORT}}; redis-cli -p {{SERVER_PORT}} -a {{SERVER_PASSWORD}} shutdown save
+
+variables:
+  - name: Redis Password
+    env: SERVER_PASSWORD
+    default: "P@55w0rd"

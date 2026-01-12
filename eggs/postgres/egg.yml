@@ -1,0 +1,29 @@
+name: Postgres
+description: A default Postgres install that is not really editable.
+author: parker@parkervcp.com
+images:
+  - !!var images.postgres
+
+install:
+  script: !!file install.sh
+  container: "postgres:14-alpine"
+  entrypoint: "bash"
+
+config:
+  stop: "^C"
+  startup:
+    done: "database system is ready to accept connections"
+  files:
+    "postgres_db/postgresql.conf":
+      parser: file
+      find:
+        "#port =": "port = {{server.build.default.port}}"
+        "#external_pid_file =": "external_pid_file = '/home/container/postgres_db/run/postgres.pid'"
+        "#unix_socket_directories =": "unix_socket_directories = '/home/container/postgres_db/run/'"
+
+startup: {{_STARTUP_COMMAND}}
+
+variables:
+  - name: Команда запуска
+    env: _STARTUP_COMMAND
+    default: "postgres  -D /home/container/postgres_db/"

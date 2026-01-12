@@ -1,0 +1,70 @@
+name: Don't Starve Together
+description: Don’t Starve Together is an uncompromising wilderness survival game full of science and magic.
+images:
+  - !!var images.debian_source
+
+install:
+  script:
+    - !!file ../../../scripts/install/debian.sh
+    - !!file install.sh
+  container: "ghcr.io/parkervcp/installers:debian"
+  entrypoint: "bash"
+
+config:
+  stop: "c_shutdown()"
+  startup:
+    done: "Setting breakpad minidump AppID"
+  files:
+    "DoNotStarveTogether/config/server/cluster.ini":
+      parser: ini
+      find:
+        "GAMEPLAY.game_mode": "{{server.build.env.GAME_MODE}}"
+        "GAMEPLAY.max_players": "{{server.build.env.MAX_PLAYERS}}"
+        "NETWORK.cluster_name": "{{server.build.env.CLUSTER_NAME}}"
+        "NETWORK.cluster_description": "{{server.build.env.CLUSTER_DESC}}"
+        "SHARD.shard_enabled": "true"
+        "SHARD.bind_ip": "127.0.0.1"
+        "SHARD.master_ip": "127.0.0.1"
+        "SHARD.master_port": "11001"
+    "DoNotStarveTogether/config/server/Master/server.ini":
+      parser: ini
+      find:
+        "NETWORK.server_port": "{{server.build.default.port}}"
+        "SHARD.is_master": "true"
+    "DoNotStarveTogether/config/server/Caves/server.ini":
+      parser: ini
+      find:
+        "NETWORK.server_port": "11000"
+        "SHARD.is_master": "false"
+        "SHARD.name": "Caves"
+
+startup: cd bin && coproc caves ( ./dontstarve_dedicated_server_nullrenderer -console -persistent_storage_root /home/container/DoNotStarveTogether -conf_dir config -cluster server -players {{MAX_PLAYERS}} -shard Caves ); ./dontstarve_dedicated_server_nullrenderer -bind_ip 0.0.0.0 -port 10999 -console -persistent_storage_root /home/container/DoNotStarveTogether -conf_dir config -cluster server -players {{MAX_PLAYERS}} -shard Master && echo 'c_shutdown()' >&"${caves[1]}"
+
+variables:
+  - name: Max Players
+    env: MAX_PLAYERS
+    default: "16"
+  - name: Server Token
+    env: SERVER_TOKEN
+    default: ""
+  - name: App ID
+    env: SRCDS_APPID
+    default: "343050"
+  - name: Auto-update server
+    env: AUTO_UPDATE
+    default: "0"
+  - name: Game mode
+    env: GAME_MODE
+    default: "survival"
+  - name: Cluster Name
+    env: CLUSTER_NAME
+    default: "A Pterodactyl Server"
+  - name: Cluster Description
+    env: CLUSTER_DESC
+    default: "A Pterodactyl Hosted Server"
+  - name: Master Worldgen Override
+    env: MASTER_WORLDGEN
+    default: "https://raw.githubusercontent.com/parkervcp/eggs/master/game_eggs/steamcmd_servers/dont_starve/worldgenoverride.master.lua"
+  - name: Caves Worldgen Override
+    env: CAVES_WORLDGEN
+    default: "https://raw.githubusercontent.com/parkervcp/eggs/master/game_eggs/steamcmd_servers/dont_starve/worldgenoverride.caves.lua"

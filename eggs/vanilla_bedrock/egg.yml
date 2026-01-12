@@ -1,0 +1,53 @@
+name: Vanilla Bedrock
+author: parker@parkervcp.com
+features:
+  - pid_limit
+images:
+  - !!var images.bedrock_yolk
+
+install:
+  script: !!file install.sh
+  container: "debian:bookworm"
+  entrypoint: "bash"
+
+config:
+  stop: "stop"
+  startup:
+    done: "Server started"
+  files:
+    "server.properties":
+      parser: properties
+      find:
+        "server-port": "{{server.build.default.port}}"
+        "server-name": "{{server.build.env.SERVERNAME}}"
+        "gamemode": "{{server.build.env.GAMEMODE}}"
+        "difficulty": "{{server.build.env.DIFFICULTY}}"
+        "allow-cheats": "{{server.build.env.CHEATS}}"
+
+startup: ./bedrock_server
+
+variables:
+  - name: Bedrock Version
+    env: BEDROCK_VERSION
+    default: "latest"
+  - name: ld lib path
+    env: LD_LIBRARY_PATH
+    default: "."
+    permissions:
+      view: false
+      edit: false
+  - name: Server Name
+    env: SERVERNAME
+    default: "Bedrock Dedicated Server"
+  - name: Gamemode
+    env: GAMEMODE
+    default: "survival"
+    rules: required|string|in:survival,creative,adventure
+  - name: Difficulty
+    env: DIFFICULTY
+    default: "easy"
+    rules: required|string|in:peaceful,easy,normal,hard
+  - name: Allow cheats
+    env: CHEATS
+    default: "false"
+    rules: required|string|in:true,false

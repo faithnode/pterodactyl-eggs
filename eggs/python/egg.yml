@@ -1,0 +1,15 @@
+name: Python
+images:
+  - !!var images.python
+
+install:
+  script: !!file install.sh
+  container: "python:3.8-slim"
+  entrypoint: "bash"
+
+config:
+  stop: "^C"
+  startup:
+    done: ""
+
+startup: bash ./start.sh
