@@ -2,7 +2,7 @@ images:
   java:
     name: Java {tag}
     image: 'ghcr.io/faithnode/pterodactyl-images/java:{tag}'
-    tags: [ 21,8,11,15,16,17,18,19,20,22,23,24,25,26 ]
+    tags: [ 25,21,8,11,15,16,17,18,19,20,22,23,24 ]
   java-openj9:
     name: Java OpenJ9 {tag}
     image: 'ghcr.io/faithnode/pterodactyl-images/java-openj9:{tag}'
@@ -10,7 +10,7 @@ images:
   javafx:
     name: Java FX {tag}
     image: 'ghcr.io/faithnode/pterodactyl-images/javafx:{tag}'
-    tags: [ 21,11,15,16,17,18,19,20,22,23,24,25,26 ]
+    tags: [ 21,11,15,16,17,18,19,20,22,23,24,25 ]
 
 config:
   minecraft-java:
