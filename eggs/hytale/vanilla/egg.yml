@@ -1,0 +1,19 @@
+name: Hytale
+images:
+  - !!var images.java
+
+install:
+  script: !!file install.sh
+
+config:
+  cmd: '{{_STARTUP_COMMAND}}'
+  startup:
+    done: Hytale Server Booted
+  stop: stop
+
+variables:
+  - env: _STARTUP_COMMAND
+    name: !!in variables.startupCommand.name
+    description: !!in variables.startupCommand.description
+    value: ./start.sh
+    rules: required|string|max:4000
