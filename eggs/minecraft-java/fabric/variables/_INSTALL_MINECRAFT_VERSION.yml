@@ -1,0 +1,4 @@
+name: Версия Minecraft
+description: Список доступных версий можно посмотреть <a href="https://meta.fabricmc.net/v2/versions/game" target="_blank">здесь</a>
+rules: required|string|max:100
+default_value: latest

@@ -10,17 +10,20 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Build toolbox image
+        run: docker build -t pterodactyl-eggs-toolbox -f Dockerfile .
+
       - name: Build
         run: |
-          bash bin/build.sh
+          docker run --rm -v "$PWD:/repo" -w /repo \
+            pterodactyl-eggs-toolbox bin/build.sh
 
       - name: Test
         run: |
-          bash bin/test.sh
+          docker run --rm -v "$PWD:/repo" -w /repo \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            pterodactyl-eggs-toolbox bin/test.sh

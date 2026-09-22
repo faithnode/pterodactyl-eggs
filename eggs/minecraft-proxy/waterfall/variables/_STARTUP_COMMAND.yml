@@ -1,0 +1,4 @@
+name: Команда запуска
+description: Команда, которая выполняется при запуске сервера
+rules: required|string|max:4000
+default_value: java -Xms128M -XX:MaxRAMPercentage=80 -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar waterfall*.jar

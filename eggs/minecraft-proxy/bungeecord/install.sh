@@ -1,4 +1,8 @@
 #!/bin/bash
+# @image debian:bookworm-slim
+
+source ../../../scripts/prepare.sh
+source ../../../scripts/timeout.sh
 
 VERSION=$_INSTALL_BUNGEECORD_VERSION
 

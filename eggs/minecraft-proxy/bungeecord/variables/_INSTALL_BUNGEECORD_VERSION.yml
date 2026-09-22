@@ -1,0 +1,4 @@
+name: Версия сборки Bungeecord
+description: Список доступных сборок можно посмотреть <a href="https://ci.md-5.net/job/BungeeCord/" target="_blank">здесь</a>
+rules: required|string|max:100
+default_value: latest

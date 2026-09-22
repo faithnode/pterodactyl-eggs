@@ -23,16 +23,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Build toolbox image
+        run: docker build -t pterodactyl-eggs-toolbox -f Dockerfile .
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Build
         run: |
-          bash bin/build.sh
+          docker run --rm -v "$PWD:/repo" -w /repo \
+            -e URL -e AUTHOR -e COMMENT \
+            pterodactyl-eggs-toolbox bin/build.sh
 
       - name: Generate Index
         run: |
-          bash bin/index.sh
+          docker run --rm -v "$PWD:/repo" -w /repo \
+            -e URL \
+            pterodactyl-eggs-toolbox bin/index.sh
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3

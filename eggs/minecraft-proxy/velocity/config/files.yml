@@ -1,0 +1,4 @@
+velocity.toml:
+  parser: file
+  find:
+    'bind = ': 'bind = "0.0.0.0:{{server.build.default.port}}"'

@@ -1,4 +1,8 @@
 #!/bin/bash
+# @image eclipse-temurin:25-jdk
+
+source ../../../scripts/prepare.sh
+source ../../../scripts/timeout.sh
 
 VERSION=$_INSTALL_MINECRAFT_VERSION;
 

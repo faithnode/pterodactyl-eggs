@@ -1,24 +1,3 @@
 name: Forge
-images:
-  - !!var images.java
-
-install:
-  script: !!file install.sh
-  container: 'eclipse-temurin:25-jdk'
-
-config:
-  cmd: '{{_STARTUP_COMMAND}}'
-  startup: !!var config.minecraft-java.startup
-  files: !!var config.minecraft-java.files
-
-variables:
-  - env: _STARTUP_COMMAND
-    name: !!in variables.startupCommand.name
-    description: !!in variables.startupCommand.description
-    value: bash run.sh
-    rules: required|string|max:4000
-  - env: _INSTALL_MINECRAFT_VERSION
-    name: !!in variables.forgeVersion.name
-    description: !!in variables.forgeVersion.description
-    value: latest
-    rules: required|string|max:100
+description: null
+startup: '{{_STARTUP_COMMAND}}'

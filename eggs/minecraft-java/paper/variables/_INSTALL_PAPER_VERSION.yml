@@ -1,0 +1,4 @@
+name: Версия Paper сервера
+description: Список доступных версий можно посмотреть <a href="https://papermc.io/downloads/paper" target="_blank">здесь</a>
+rules: required|string|max:100
+default_value: latest
