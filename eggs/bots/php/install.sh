@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source ../../../scripts/prepare.sh
+
 echo "php index.php" > start.sh
 chmod +x start.sh
 

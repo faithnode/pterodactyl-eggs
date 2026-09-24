@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source ../../../scripts/prepare.sh
+
 echo "python index.py" > start.sh
 chmod +x start.sh
 

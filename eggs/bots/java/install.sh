@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source ../../../scripts/prepare.sh
+
 echo "java Main.java" > start.sh
 chmod +x start.sh
 

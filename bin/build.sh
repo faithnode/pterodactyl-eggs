@@ -125,7 +125,7 @@ collect_dir_vars() {
       field_type: (.field_type // "text")
     }' <<<"$raw")"
     result="$(jq -c --argjson e "$entry" '. + [$e]' <<<"$result")"
-  done < <(find "$dir" -maxdepth 1 -type f \( -name '*.json' -o -name '*.yml' -o -name '*.yaml' \) | sort)
+  done < <(find -L "$dir" -maxdepth 1 -type f \( -name '*.json' -o -name '*.yml' -o -name '*.yaml' \) | sort)
 
   printf '%s' "$result"
 }

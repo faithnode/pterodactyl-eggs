@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source ../../../scripts/prepare.sh
+
 echo "node index.js" > start.sh
 chmod +x start.sh
 

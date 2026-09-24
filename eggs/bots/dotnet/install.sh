@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source ../../../scripts/prepare.sh
+
 echo "dotnet run Program.cs" > start.sh
 chmod +x start.sh
 
