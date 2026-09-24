@@ -1,0 +1,3 @@
+name: .NET
+description: null
+startup: '{{_STARTUP_COMMAND}}'

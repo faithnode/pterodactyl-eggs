@@ -1,0 +1,4 @@
+name: Команда запуска
+description: Команда, которая выполняется при запуске сервера
+default_value: ./start.sh
+rules: required|string|max:1000

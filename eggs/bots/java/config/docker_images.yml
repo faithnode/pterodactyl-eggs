@@ -1,0 +1,38 @@
+Java 8: ghcr.io/faithnode/pterodactyl-images/java:8
+Java 11: ghcr.io/faithnode/pterodactyl-images/java:11
+Java 16: ghcr.io/faithnode/pterodactyl-images/java:16
+Java 17: ghcr.io/faithnode/pterodactyl-images/java:17
+Java 18: ghcr.io/faithnode/pterodactyl-images/java:18
+Java 19: ghcr.io/faithnode/pterodactyl-images/java:19
+Java 20: ghcr.io/faithnode/pterodactyl-images/java:20
+Java 21: ghcr.io/faithnode/pterodactyl-images/java:21
+Java 22: ghcr.io/faithnode/pterodactyl-images/java:22
+Java 23: ghcr.io/faithnode/pterodactyl-images/java:23
+Java 24: ghcr.io/faithnode/pterodactyl-images/java:24
+Java 25: ghcr.io/faithnode/pterodactyl-images/java:25
+Java 26: ghcr.io/faithnode/pterodactyl-images/java:26
+Java OpenJ9 8: ghcr.io/faithnode/pterodactyl-images/java-openj9:8
+Java OpenJ9 11: ghcr.io/faithnode/pterodactyl-images/java-openj9:11
+Java OpenJ9 16: ghcr.io/faithnode/pterodactyl-images/java-openj9:16
+Java OpenJ9 17: ghcr.io/faithnode/pterodactyl-images/java-openj9:17
+Java OpenJ9 18: ghcr.io/faithnode/pterodactyl-images/java-openj9:18
+Java OpenJ9 19: ghcr.io/faithnode/pterodactyl-images/java-openj9:19
+Java OpenJ9 20: ghcr.io/faithnode/pterodactyl-images/java-openj9:20
+Java OpenJ9 21: ghcr.io/faithnode/pterodactyl-images/java-openj9:21
+Java OpenJ9 22: ghcr.io/faithnode/pterodactyl-images/java-openj9:22
+Java OpenJ9 23: ghcr.io/faithnode/pterodactyl-images/java-openj9:23
+Java OpenJ9 24: ghcr.io/faithnode/pterodactyl-images/java-openj9:24
+Java OpenJ9 25: ghcr.io/faithnode/pterodactyl-images/java-openj9:25
+Java OpenJ9 26: ghcr.io/faithnode/pterodactyl-images/java-openj9:26
+Java FX 11: ghcr.io/faithnode/pterodactyl-images/javafx:11
+Java FX 16: ghcr.io/faithnode/pterodactyl-images/javafx:16
+Java FX 17: ghcr.io/faithnode/pterodactyl-images/javafx:17
+Java FX 18: ghcr.io/faithnode/pterodactyl-images/javafx:18
+Java FX 19: ghcr.io/faithnode/pterodactyl-images/javafx:19
+Java FX 20: ghcr.io/faithnode/pterodactyl-images/javafx:20
+Java FX 21: ghcr.io/faithnode/pterodactyl-images/javafx:21
+Java FX 22: ghcr.io/faithnode/pterodactyl-images/javafx:22
+Java FX 23: ghcr.io/faithnode/pterodactyl-images/javafx:23
+Java FX 24: ghcr.io/faithnode/pterodactyl-images/javafx:24
+Java FX 25: ghcr.io/faithnode/pterodactyl-images/javafx:25
+Java FX 26: ghcr.io/faithnode/pterodactyl-images/javafx:26

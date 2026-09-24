@@ -1,0 +1,9 @@
+PHP 5.6: ghcr.io/faithnode/pterodactyl-images/php:5.6
+PHP 7.0: ghcr.io/faithnode/pterodactyl-images/php:7.0
+PHP 7.4: ghcr.io/faithnode/pterodactyl-images/php:7.4
+PHP 8.0: ghcr.io/faithnode/pterodactyl-images/php:8.0
+PHP 8.1: ghcr.io/faithnode/pterodactyl-images/php:8.1
+PHP 8.2: ghcr.io/faithnode/pterodactyl-images/php:8.2
+PHP 8.3: ghcr.io/faithnode/pterodactyl-images/php:8.3
+PHP 8.4: ghcr.io/faithnode/pterodactyl-images/php:8.4
+PHP 8.5: ghcr.io/faithnode/pterodactyl-images/php:8.5

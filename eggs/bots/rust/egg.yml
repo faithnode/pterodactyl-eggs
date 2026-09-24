@@ -1,0 +1,3 @@
+name: Rust
+description: null
+startup: '{{_STARTUP_COMMAND}}'

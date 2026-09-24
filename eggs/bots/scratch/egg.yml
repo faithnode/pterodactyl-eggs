@@ -1,0 +1,3 @@
+name: Scratch
+description: null
+startup: '{{_STARTUP_COMMAND}}'
